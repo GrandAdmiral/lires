@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Test</string>
+
+    <string name="lires_html">
+        <![CDATA[
+<FONT COLOR="#515045">Λ</FONT><FONT COLOR="#d8361c">Ι</FONT><FONT COLOR="#62b41b">Ρ</FONT><FONT COLOR="#1a86d9">Ε</FONT><FONT COLOR="#515045">Σ</FONT>
+        ]]>
+    </string>
+
+    <string name="pame_html">
+        <![CDATA[
+<FONT COLOR="#FFF">ΠΑΜΕ</FONT>
+        ]]>
+    </string>
+
+    <string name="skor_html">
+        <![CDATA[
+<FONT COLOR="#FFF">ΣΚΟΡ</FONT>
+        ]]>
+    </string>
+
+    <string name="voith_html">
+        <![CDATA[
+<FONT COLOR="#515045">Β</FONT><FONT COLOR="#d8361c">ΟΗ</FONT><FONT COLOR="#62b41b">ΘΕ</FONT><FONT COLOR="#1a86d9">ΙΕ</FONT><FONT COLOR="#515045">Σ</FONT>
+        ]]>
+    </string>
+
+    <string name="tel_html">
+        <![CDATA[
+<FONT COLOR="#515045">ΒΟΗΘ</FONT><FONT COLOR="#d8361c">ΕΙΑ Τ</FONT><FONT COLOR="#62b41b">ΟΥ ΤΗ</FONT><FONT COLOR="#1a86d9">ΛΕΦΩ</FONT><FONT COLOR="#515045">ΝΟΥ</FONT>
+        ]]>
+    </string>
+
+      <string name="pub_html">
+        <![CDATA[
+<FONT COLOR="#515045">ΒΟΗΘ</FONT><FONT COLOR="#d8361c">ΕΙΑ Τ</FONT><FONT COLOR="#62b41b">ΟΥ ΚΟ</FONT><FONT COLOR="#1a86d9">ΙΝ</FONT><FONT COLOR="#515045">ΟΥ</FONT>
+        ]]>
+    </string>
+    <string name="kerdisate_html">
+        <![CDATA[
+<FONT COLOR="#515045">ΚΕ</FONT><FONT COLOR="#d8361c">ΡΔ</FONT><FONT COLOR="#62b41b">ΙΣ</FONT><FONT COLOR="#1a86d9">ΑΤ</FONT><FONT COLOR="#515045">Ε</FONT>
+        ]]>
+    </string>
+
+    <string name="entername_html">
+        <![CDATA[
+<FONT COLOR="#515045">ΟΝΟΜΑ </FONT><FONT COLOR="#d8361c">ΠΑ</FONT><FONT COLOR="#62b41b">ΙΧ</FONT><FONT COLOR="#1a86d9">ΤΗ</FONT>
+        ]]>
+    </string>
+
+    <string name="action_settings">Settings</string>
+
+</resources>
