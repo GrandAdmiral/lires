@@ -46,7 +46,7 @@ public class MainActivity extends ActionBarActivity {
     public ArrayList<Question> Questions = new ArrayList<Question>();
     public ArrayList<Player> Players = new ArrayList<Player>();
     private Button pame,skor,protaseis;
-    private TextView lires;
+    private TextView lires,scoremain3,scoremain4;
     private static Context context;
     private MediaPlayer music;
 
@@ -59,6 +59,7 @@ public class MainActivity extends ActionBarActivity {
             StrictMode.setThreadPolicy(policy);
         }
         Typeface font = Typeface.createFromAsset(getAssets(), "bitstream-iowan-old-style-bold-bt.ttf");
+        scoremain4 = (TextView) findViewById(R.id.scoremain4);
         lires = (TextView) findViewById(R.id.lires);
         lires.setText(Html.fromHtml(getString(R.string.lires_html)));
         pame = (Button) findViewById(R.id.pame);
@@ -98,16 +99,31 @@ public class MainActivity extends ActionBarActivity {
                     SharedPreference sharedP=new SharedPreference();
                     sharedP.save(getApplicationContext(),user_json,"OP_PREFS","questionsdownloaded");
                     sharedP.save(getApplicationContext(),user_players,"OP_PREFS","listofplayers");
-
+                    int temp=0;
                     int i;
                     for (i=0; i<Players.size(); i++){
-                        if (Players.get(i).deviceid.equals(Settings.Secure.getString(getApplicationContext().getContentResolver(),
-                                Settings.Secure.ANDROID_ID))){
+                        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                                Settings.Secure.ANDROID_ID);
+                        if (Players.get(i).deviceid.equals(android_id)){
                            System.out.println("Current Score:"+Players.get(i).getScoreAmount());
+                            temp=1;
+                            final int finalI = i;
+                            runOnUiThread (new Thread(new Runnable() {
+                                public void run() {
+                                    scoremain4.setText(Players.get(finalI).getScoreAmount());
+                                }
+                            }));
                         }
-
-
                     }
+                        if (temp==0) {
+                            System.out.println("Curr Score: 0");
+                            runOnUiThread(new Thread(new Runnable() {
+                                public void run() {
+                                    String s2="<![<FONT COLOR=\"#515045\">10000  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
+                                    scoremain4.setText(Html.fromHtml(s2));
+                                }
+                            }));
+                        }
                     }
 
                catch (Exception e) {

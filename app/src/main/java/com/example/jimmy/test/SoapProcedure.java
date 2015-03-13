@@ -22,11 +22,19 @@ public class SoapProcedure {
 
     private static String SOAP_ACTION2 = "http://tempuri.org/GetAllPlayersWithScores";
 
+    private static String SOAP_ACTION3 = "http://tempuri.org/ScoreSubmissionWithFullScore";
+
+    private static String SOAP_ACTION4 = "http://tempuri.org/CreatePlayer";
+
     private static String NAMESPACE = "http://tempuri.org/";
 
     private static String METHOD_NAME1 = "GetAllQuestions";
 
     private static String METHOD_NAME2 = "GetAllPlayersWithScores";
+
+    private static String METHOD_NAME3 = "ScoreSubmissionWithFullScore";
+
+    private static String METHOD_NAME4 = "CreatePlayer";
 
     private static String URL = "http://test.kypriakeslires.com/WS.asmx?";
 
@@ -97,7 +105,7 @@ public class SoapProcedure {
                         int timesplayed = Integer.parseInt(e.getProperty("TimesPlayed").toString());
                         int score = Integer.parseInt(e.getProperty("ScoreAmount").toString());
                         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-                        Date date =  df.parse(e.getProperty("UpdatedDate").toString());
+                        Date date = df.parse(e.getProperty("UpdatedDate").toString());
                         Player a = new Player(name, deviceid, timesplayed, date, score);
                         Players.add(a);
                         //System.out.println(a.text);
@@ -109,6 +117,57 @@ public class SoapProcedure {
 
         }
         return Players;
+    }
+
+
+    public void submitScore(String name, String uuid, String scoreSoFar) {
+        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME3);
+        request.addProperty("username", "jimmys");
+        request.addProperty("password", "aek");
+        request.addProperty("name", name);
+        request.addProperty("uuid", uuid);
+        request.addProperty("scoresSoFar", scoreSoFar);
+        request.addProperty("dateTime", DateFormat.getDateInstance());
+        //0;0;20121212####0;1;20121212####500;6;20121212####
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        System.out.println(request.toString());
+        envelope.setOutputSoapObject(request);
+        envelope.dotNet = true;
+        HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+        try {
+            androidHttpTransport.call(SOAP_ACTION3, envelope);
+            SoapObject result = null;
+            result = (SoapObject) envelope.getResponse();
+        } catch (Exception e) {
+
+
+        }
+
+    }
+
+
+    public void createPlayer(String name, String uuid) {
+        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME4);
+        request.addProperty("username", "jimmys");
+        request.addProperty("password", "aek");
+        request.addProperty("name", name);
+        request.addProperty("deviceId", uuid);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        System.out.println(request.toString());
+        envelope.setOutputSoapObject(request);
+        envelope.dotNet = true;
+        HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+        try {
+            androidHttpTransport.call(SOAP_ACTION4, envelope);
+            SoapObject result = null;
+            result = (SoapObject) envelope.getResponse();
+        } catch (Exception e) {
+
+
+        }
+
     }
 
 }
