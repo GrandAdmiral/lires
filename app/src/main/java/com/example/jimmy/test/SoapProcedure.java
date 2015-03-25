@@ -1,5 +1,7 @@
 package com.example.jimmy.test;
 
+import android.provider.Settings;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -124,11 +126,13 @@ public class SoapProcedure {
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME3);
         request.addProperty("username", "jimmys");
         request.addProperty("password", "aek");
+
         request.addProperty("name", name);
         request.addProperty("uuid", uuid);
         request.addProperty("scoresSoFar", scoreSoFar);
-        request.addProperty("dateTime", DateFormat.getDateInstance());
-        //0;0;20121212####0;1;20121212####500;6;20121212####
+        request.addProperty("fullScore", 0);
+        request.addProperty("maxLevel", 0);
+        //0;0;20121212;####0;1;20121212;####500;6;20121212;####
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         System.out.println(request.toString());
         envelope.setOutputSoapObject(request);

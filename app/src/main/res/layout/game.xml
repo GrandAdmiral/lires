@@ -421,7 +421,7 @@
             <TextView
                 android:id="@+id/blue_500000"
                 android:layout_gravity="center"
-                android:background="#1a86d9"
+                android:background="#7e4881"
                 android:textAlignment="center"
                 android:textColor="#fff"
                 android:text="500000 λίρες"

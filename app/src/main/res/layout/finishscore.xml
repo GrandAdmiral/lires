@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:minWidth="500dp"
-    android:minHeight="400dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#e1e0d7"
+    android:orientation="vertical"
     android:gravity="center_horizontal">
 
 
@@ -13,46 +11,62 @@
         android:id="@+id/kerdisate"
         android:textSize="20dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+         />
 
     <TextView
         android:id="@+id/finalscore"
         android:text="500"
         android:textSize="30dp"
         android:textColor="#7e4881"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
         />
 
     <TextView
         android:id="@+id/lires12"
         android:textSize="20dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         />
     <Button
-        android:layout_marginTop="50dp"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:id="@+id/goagain"
         android:text="ΠΑΜΕ ΞΑΝΑ!"
-        android:textSize="30dp"
+        android:textSize="25dp"
         android:background="@drawable/mybuttonblue"
         android:textColor="#fff"/>
+    <TextView
+        android:id="@+id/finalscore14"
+        android:text=""
+        android:textSize="30dp"
+        android:textColor="#7e4881"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        />
     <Button
-        android:layout_marginTop="10dp"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:id="@+id/goback"
         android:text="ΠΙΣΩ"
-        android:textSize="30dp"
+        android:textSize="25dp"
         android:background="@drawable/mybuttonred"
         android:textColor="#fff"/>
-
+    <TextView
+        android:id="@+id/finalscore15"
+        android:text=""
+        android:textSize="30dp"
+        android:textColor="#7e4881"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        />
 </LinearLayout>

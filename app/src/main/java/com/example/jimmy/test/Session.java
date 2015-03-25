@@ -238,20 +238,41 @@ public class Session {
 
 
    }
-void advance(String response){
-    if (response.equals(ca)) {
-        currquest++;
-        score = prize[currquest - 2];
-        Question q=null;
-        if (currquest < 8) {q=getQuestion(2); System.out.println("Get question(2)");} else
-        if (currquest <12) {q=getQuestion(3); System.out.println("Get question(3)");} else
-        if (currquest<15 ) {q=getQuestion(4); System.out.println("Get question(4)");} else
-        if (currquest>14) {q=getQuestion(5); System.out.println("Get question(5)");}
-        setParams(q);
-    }
-    else {
-        flag=1;
-    }
+    void advance(String response){
+        if ((response.equals(ca)&&(getCurrquest()!=18))) {
+            currquest++;
+            if (getCurrquest()<5) {
+                score=0;
+            }
+            if ((getCurrquest()>4)&&(getCurrquest()<9)) {
+                score = 500;
+            }
+            if ((getCurrquest()>8)&&(getCurrquest()<13)) {
+                score = 5000;
+            }
+            if ((getCurrquest()>12)&&(getCurrquest()<17)) {
+                score = 50000;
+            }
+            if ((getCurrquest()>16)&&(getCurrquest()<18)) {
+                score = 500000;
+            }
+            if ((getCurrquest()==19)) {
+                score = 1000000;
+            }
+            Question q=null;
+            if (currquest < 8) {q=getQuestion(2); System.out.println("Get question(2)");} else
+            if (currquest <12) {q=getQuestion(3); System.out.println("Get question(3)");} else
+            if (currquest<15 ) {q=getQuestion(4); System.out.println("Get question(4)");} else
+            if (currquest>14) {q=getQuestion(5); System.out.println("Get question(5)");}
+            setParams(q);
+        }
+        else {
+            flag=1;
+            if ((response.equals(ca)&&(getCurrquest()==18))){
+                score=1000000;
+                flag=2;
+            }
+        }
 
 }
 

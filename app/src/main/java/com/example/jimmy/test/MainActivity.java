@@ -87,11 +87,23 @@ public class MainActivity extends ActionBarActivity {
             public void run() {
                 try {
 
+                    SharedPreference sharedPreference=new SharedPreference();
                     SoapProcedure soap = new SoapProcedure();
                     Questions = soap.qresult();
                     Players= soap.presult();
 
+                    String score = sharedPreference.getValue(context,"OP_PREFS","score");
+                    System.out.println("Score at this point:" + score);
+                    String s2="<![<FONT COLOR=\"#515045\">"+score+"  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
+                    scoremain4.setText(Html.fromHtml(s2));
+
+                    String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                            Settings.Secure.ANDROID_ID);
+                    String username = sharedPreference.getValue(context,"OP_PREFS","username");
+                    String scoresofar = sharedPreference.getValue(context,"OP_PREFS","scoresofar");
+                    soap.submitScore(username,android_id,scoresofar);
                     System.out.println(context.toString());
+
                     Gson gson = new Gson();
                     String user_json = gson.toJson(Questions);
                     String user_players=gson.toJson(Players);
@@ -102,16 +114,17 @@ public class MainActivity extends ActionBarActivity {
                     sharedP.save(getApplicationContext(),user_players,"OP_PREFS","listofplayers");
                     int temp=0;
                     int i;
-                    for (i=0; i<Players.size(); i++){
-                        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-                                Settings.Secure.ANDROID_ID);
-                        if (Players.get(i).deviceid.equals(android_id)){
-                           System.out.println("Current Score:"+Players.get(i).getScoreAmount());
+
+
+                    /*for (i=0; i<Players.size(); i++){
+                            if (Players.get(i).deviceid.equals(android_id)){
+                            System.out.println("Current Score:"+Players.get(i).getScoreAmount());
                             temp=1;
                             final int finalI = i;
                             runOnUiThread (new Thread(new Runnable() {
                                 public void run() {
                                     scoremain4.setText(Players.get(finalI).getScoreAmount());
+
                                 }
                             }));
                         }
@@ -124,8 +137,10 @@ public class MainActivity extends ActionBarActivity {
                                     scoremain4.setText(Html.fromHtml(s2));
                                 }
                             }));
-                        }
-                    }
+                        }*/
+
+
+                }
 
                catch (Exception e) {
                    System.out.println(e.getMessage());

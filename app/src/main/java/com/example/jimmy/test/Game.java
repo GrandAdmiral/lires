@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -27,6 +28,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.transition.Slide;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -181,7 +183,7 @@ public class Game extends ActionBarActivity {
                         public void run() {
                             changeColor(a1, answers[0], right, wrong,v);
                         }
-                    }, 2000);
+                    }, 7000);
 
                 }
             }
@@ -208,7 +210,7 @@ public class Game extends ActionBarActivity {
                         public void run() {
                             changeColor(a2,answers[1],right,wrong,v);
                         }
-                    }, 2000);
+                    }, 7000);
 
                 }
             }
@@ -235,7 +237,7 @@ public class Game extends ActionBarActivity {
                         public void run() {
                             changeColor(a3,answers[2],right,wrong,v);
                         }
-                    }, 2000);
+                    }, 7000);
                 }
             }
         });
@@ -263,7 +265,7 @@ public class Game extends ActionBarActivity {
                         public void run() {
                             changeColor(a4,answers[3],right,wrong,v);
                         }
-                    }, 2000);
+                    }, 7000);
 
                 }
             }
@@ -334,58 +336,79 @@ public class Game extends ActionBarActivity {
         System.out.println("Current Question="+game.getCurrquest()+"   Score="+game.getScore());
         if (answer.equals("0")) {
             //System.out.println("Answer equals 0");
-            if (game.getFlag() != 1) {
+            if (game.getFlag() < 1) {
+
                 System.out.println("Answer equals set the board");
-                randomizeAnswers(answers);
-                setBoard(game);
-                bflag=0;
-                donutProgress.setMax(45);
-                donutProgress.setProgress(45);
-                pauseflag=0;
-                startTimer(45000,1000);
-                System.out.println("Pause flag (controller)= "+pauseflag);
+                    randomizeAnswers(answers);
+                    setBoard(game);
+                    bflag=0;
+                    donutProgress.setMax(45);
+                    donutProgress.setProgress(45);
+                    pauseflag=0;
+                    startTimer(45000,1000);
+                    System.out.println("Pause flag (controller)= "+pauseflag);
+
                 } else {
-                pauseflag = 1;
-                Context context=getApplicationContext();
-                String score = sharedPreference.getValue(context,"OP_PREFS","score");
-                int newscore=Integer.parseInt(score)+game.getScore();
-                sharedPreference.save(context,"score","OP_PREFS",Integer.toString(newscore));
-                dialog = new Dialog(Game.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                // Include dialog.xml file
-                dialog.setContentView(R.layout.finishscore);
-                TextView kerdisate= (TextView)dialog.findViewById(R.id.kerdisate);
-                kerdisate.setText(Html.fromHtml(getString(R.string.kerdisate_html)));
-                TextView lires12= (TextView)dialog.findViewById(R.id.lires12);
-                lires12.setText(Html.fromHtml(getString(R.string.lires_html)));
-                TextView finalscore = (TextView) dialog.findViewById(R.id.finalscore);
-                finalscore.setText(Integer.toString(game.getScore()));
-                Button pameksana = (Button)dialog.findViewById(R.id.goagain);
-                Button pisw=(Button)dialog.findViewById(R.id.goback);
-                pameksana.setOnClickListener(new View.OnClickListener() {
+
+                    pauseflag = 1;
+                    Context context=getApplicationContext();
+                    String score = sharedPreference.getValue(context,"OP_PREFS","score");
+                    String scoresofar = sharedPreference.getValue(context,"OP_PREFS","scoresofar");
+                    int newscore=Integer.parseInt(score)+game.getScore();
+                    String newscoresofar=scoresofar+"0;0;20121212;####0;1;20121212;####"+game.getScore()+";"+game.getCurrquest()+";20121212;####";
+                    sharedPreference.save(context,"score","OP_PREFS",Integer.toString(newscore));
+                    sharedPreference.save(context,"scoresofar","OP_PREFS",newscoresofar);
+                    dialog = new Dialog(Game.this);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    // Include dialog.xml file
+                    dialog.setContentView(R.layout.finishscore);
+
+                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                    lp.copyFrom(dialog.getWindow().getAttributes());
+                    Display display = getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    int width = size.x;
+                    int height = size.y;
+                    lp.width = (int) (width*0.6);
+                    lp.height = (int) (height*0.6);
+                    dialog.getWindow().setAttributes(lp);
+
+                    TextView kerdisate= (TextView)dialog.findViewById(R.id.kerdisate);
+                    kerdisate.setText(Html.fromHtml(getString(R.string.kerdisate_html)));
+                    TextView lires12= (TextView)dialog.findViewById(R.id.lires12);
+                    lires12.setText(Html.fromHtml(getString(R.string.lires_html)));
+                    TextView finalscore = (TextView) dialog.findViewById(R.id.finalscore);
+
+                    finalscore.setText(Integer.toString(game.getScore()));
+                    Button pameksana = (Button)dialog.findViewById(R.id.goagain);
+                    Button pisw=(Button)dialog.findViewById(R.id.goback);
+                    pameksana.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         System.out.println("Button pressed?");
                         dialog.dismiss();
 
                     }  });
-                pisw.setOnClickListener(new View.OnClickListener() {
+                    pisw.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-
+                        Intent intent = new Intent(Game.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }  });
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(final DialogInterface arg0) {
                         //ADDSCORE
                         reset();
 
 
-                    }
-                });
-                dialog.show();
+                        }
+                    });
+                    dialog.show();
 
 
+                }
             }
-        }
             else{
                 //changeColor(answer);
                 a.cancel();
@@ -397,7 +420,7 @@ public class Game extends ActionBarActivity {
                     sleepflag = 0;
 
                 }
-            }, 300);
+            }, 3000);
 
             //timer3.cancel();
                 if ((!right)&&(game.getCurrquest()>1)) timer3.cancel();
@@ -854,7 +877,7 @@ public void scoreAnimation(final View v,String answ23){
 }
 
     private void startTimer3(int duration,int interval,final String answ23,final View v) {
-        timer3 = new CountDownTimer(2200, 100)
+        timer3 = new CountDownTimer(6000, 100)
 
         {
 
@@ -862,17 +885,17 @@ public void scoreAnimation(final View v,String answ23){
 
             @Override
             public void onTick(long leftTimeInMilliseconds) {
-            long secspassed = 2200-leftTimeInMilliseconds;
-                if ((secspassed>500)&&(sleepflag<1)){
+            long secspassed = 6000-leftTimeInMilliseconds;
+                if ((secspassed>3000)&&(sleepflag<1)){
                     sleepflag=1;
                     moveAnimation();
 
                 }
-                if ((secspassed>1500)&&(sleepflag<2)) {
+                if ((secspassed>3500)&&(sleepflag<2)) {
                     slideUpDown(v);
                     sleepflag = 2;
                 }
-                if ((secspassed>1900)&&(sleepflag<3)){
+                if ((secspassed>5000)&&(sleepflag<3)){
                     System.out.println("About to call controller from Timer3 onTick");
                     sleepflag=3;
                     controller(game, answ23);
@@ -927,7 +950,7 @@ public void moveAnimation(){
            break;
        case 15: executeAnimation(purple300000,purple_sofar,"#7e4881","300000 λίρες",1000);
            break;
-       case 16: executeAnimation(blue500,blue_sofar,"#1a86d9","500000 λίρες",1000);
+       case 16: executeAnimation(blue500,purple_sofar,"#7e4881","500000 λίρες",1000);
            break;
        case 17: executeAnimation(blue580,blue_sofar,"#1a86d9","586509 λίρες",1000);
            break;
