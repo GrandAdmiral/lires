@@ -90,12 +90,19 @@ public class MainActivity extends ActionBarActivity {
                     SharedPreference sharedPreference=new SharedPreference();
                     SoapProcedure soap = new SoapProcedure();
                     Questions = soap.qresult();
-                    Players= soap.presult();
+                    //Players= soap.presult();
 
                     String score = sharedPreference.getValue(context,"OP_PREFS","score");
                     System.out.println("Score at this point:" + score);
-                    String s2="<![<FONT COLOR=\"#515045\">"+score+"  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
-                    scoremain4.setText(Html.fromHtml(s2));
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            SharedPreference sharedPreference=new SharedPreference();
+                            String score = sharedPreference.getValue(context,"OP_PREFS","score");
+                            String s2="<![<FONT COLOR=\"#515045\">"+score+"  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
+                            scoremain4.setText(Html.fromHtml(s2));
+                        }
+                    });
 
                     String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                             Settings.Secure.ANDROID_ID);
@@ -106,12 +113,12 @@ public class MainActivity extends ActionBarActivity {
 
                     Gson gson = new Gson();
                     String user_json = gson.toJson(Questions);
-                    String user_players=gson.toJson(Players);
+                    //String user_players=gson.toJson(Players);
                     System.out.println(user_json);
-                    System.out.println(user_players);
+                    //System.out.println(user_players);
                     SharedPreference sharedP=new SharedPreference();
                     sharedP.save(getApplicationContext(),user_json,"OP_PREFS","questionsdownloaded");
-                    sharedP.save(getApplicationContext(),user_players,"OP_PREFS","listofplayers");
+                    //sharedP.save(getApplicationContext(),user_players,"OP_PREFS","listofplayers");
                     int temp=0;
                     int i;
 

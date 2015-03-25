@@ -356,8 +356,10 @@ public class Game extends ActionBarActivity {
                     String scoresofar = sharedPreference.getValue(context,"OP_PREFS","scoresofar");
                     int newscore=Integer.parseInt(score)+game.getScore();
                     String newscoresofar=scoresofar+"0;0;20121212;####0;1;20121212;####"+game.getScore()+";"+game.getCurrquest()+";20121212;####";
-                    sharedPreference.save(context,"score","OP_PREFS",Integer.toString(newscore));
-                    sharedPreference.save(context,"scoresofar","OP_PREFS",newscoresofar);
+                    sharedPreference.save(context,Integer.toString(newscore),"OP_PREFS","score");
+                    sharedPreference.save(context,newscoresofar,"OP_PREFS","scoresofar");
+                    System.out.println("Saving Score as:"+newscore);
+                    System.out.println("Saved:"+sharedPreference.getValue(context,"OP_PREFS","score"));
                     dialog = new Dialog(Game.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     // Include dialog.xml file
