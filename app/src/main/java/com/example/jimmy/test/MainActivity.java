@@ -58,13 +58,14 @@ public class MainActivity extends ActionBarActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-        Typeface font = Typeface.createFromAsset(getAssets(), "bitstream-iowan-old-style-bold-bt.ttf");
+        Typeface font = Typeface.createFromAsset(getAssets(), "Roboto-Light.ttf");
         scoremain4 = (TextView) findViewById(R.id.scoremain4);
         lires = (TextView) findViewById(R.id.lires);
+        Typeface fontlight=Typeface.createFromAsset(getAssets(),"Roboto-Bold.ttf");
+        lires.setTypeface(fontlight);
         lires.setText(Html.fromHtml(getString(R.string.lires_html)));
         pame = (Button) findViewById(R.id.pame);
         pame.setTypeface(font);
-        lires.setTypeface(font);
         pame.setText(Html.fromHtml(getString(R.string.pame_html)));
         skor = (Button) findViewById(R.id.skor);
         skor.setText(Html.fromHtml(getString(R.string.skor_html)));

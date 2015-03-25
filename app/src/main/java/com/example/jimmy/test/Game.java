@@ -18,6 +18,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -39,6 +40,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -77,7 +79,8 @@ public class Game extends ActionBarActivity {
     private TextView red_sofar,green_sofar,blue_sofar,purple_sofar,orange_sofar,green_500,trial,trial2;
     private TextView green100,green200,green300,green500,orange1000,orange2000,orange3000,orange5000,red10000,red20000,red30000,red50000,purple100000,purple200000,purple300000;
     private TextView blue500,blue580,blue1000;
-    private Button a1,a2,a3,a4,gh,rh,bh,exittel,exitpub,gamw;
+    private Button a1,a2,a3,a4,exittel,exitpub,gamw;
+    private ImageButton gh,rh,bh;
     private DonutProgress donutProgress;
     private RelativeLayout hiddenPanel;
     private RelativeLayout rel1;
@@ -93,7 +96,7 @@ public class Game extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
-        Typeface font = Typeface.createFromAsset(getAssets(), "bitstream-iowan-old-style-bold-bt.ttf");
+        Typeface font = Typeface.createFromAsset(getAssets(), "Roboto-Light.ttf");
         musicflag=0;
         framework=(FrameLayout)findViewById(R.id.framework);
         layoutcontainer=(LinearLayout)findViewById(R.id.layoutContainer);
@@ -270,18 +273,18 @@ public class Game extends ActionBarActivity {
 
 
 
-        gh=(Button)findViewById(R.id.greenhelp);
+        gh=(ImageButton)findViewById(R.id.greenhelp);
         gh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                  boitheia("green");
             }  });
-        rh=(Button)findViewById(R.id.redhelp);
+        rh=(ImageButton)findViewById(R.id.redhelp);
         rh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 boitheia("red");
             }  });
-        bh=(Button)findViewById(R.id.bluehelp);
+        bh=(ImageButton)findViewById(R.id.bluehelp);
         bh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //System.out.println("Button setting pauseflag 1");
