@@ -434,20 +434,38 @@ public class Game extends ActionBarActivity {
 
 
 
-    public void setBoard(Session game1){
+    public void setBoard(final Session game1){
         questtext.setText(game1.questt);
         String first = "<font color='#000000'>A. </font>";
         String next = "<font color='#ffffff'>"+getAns(game1,answers[0])+"</font>";
         a1.setText(Html.fromHtml(first + next));
-        first = "<font color='#000000'>B. </font>";
-        next = "<font color='#ffffff'>"+getAns(game1,answers[1])+"</font>";
-        a2.setText(Html.fromHtml(first + next));
-        first = "<font color='#000000'>Γ. </font>";
-        next = "<font color='#ffffff'>"+getAns(game1,answers[2])+"</font>";
-        a3.setText(Html.fromHtml(first + next));
-        first = "<font color='#000000'>Δ. </font>";
-        next = "<font color='#ffffff'>"+getAns(game1,answers[3])+"</font>";
-        a4.setText(Html.fromHtml(first + next));
+        a2.setText("");
+        a3.setText("");
+        a4.setText("");
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                String first = "<font color='#000000'>B. </font>";
+                String next = "<font color='#ffffff'>"+getAns(game1,answers[1])+"</font>";
+                a2.setText(Html.fromHtml(first + next));
+            }
+        }, 1500);
+        Handler handler2 = new Handler();
+        handler2.postDelayed(new Runnable() {
+            public void run() {
+                String first = "<font color='#000000'>Γ. </font>";
+                String next = "<font color='#ffffff'>"+getAns(game1,answers[2])+"</font>";
+                a3.setText(Html.fromHtml(first + next));
+            }
+        }, 3000);
+        Handler handler3 = new Handler();
+        handler3.postDelayed(new Runnable() {
+            public void run() {
+                String first = "<font color='#000000'>Δ. </font>";
+                String next = "<font color='#ffffff'>"+getAns(game1,answers[3])+"</font>";
+                a4.setText(Html.fromHtml(first + next));
+            }
+        }, 4500);
         a1.setBackgroundColor(Color.parseColor("#8a8a8a"));
         a2.setBackgroundColor(Color.parseColor("#8a8a8a"));
         a3.setBackgroundColor(Color.parseColor("#8a8a8a"));

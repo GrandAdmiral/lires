@@ -110,11 +110,14 @@
         android:textColor="#ffffff"
         android:background="@drawable/mybuttongreen"
         android:layout_width="350dp"
-        android:layout_height="50dp"
-
+        android:layout_height="fill_parent"
         android:radius="10dp"
         />
     </RelativeLayout>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"/>
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -125,10 +128,10 @@
         android:id="@+id/skor"
         android:textSize="35dp"
         android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_height="fill_parent"
         android:textColor="#ffffff"
         android:background="@drawable/mybuttonblue"
-        android:layout_marginTop="15dp"
+        android:radius="10dp"
         />
 </RelativeLayout>
 
