@@ -70,6 +70,8 @@ public class MainActivity extends ActionBarActivity {
         skor = (Button) findViewById(R.id.skor);
         skor.setText(Html.fromHtml(getString(R.string.skor_html)));
         skor.setTypeface(font);
+
+
         pame.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 music.stop();
@@ -78,7 +80,18 @@ public class MainActivity extends ActionBarActivity {
                 finish();
             }
         });
-        //Initialize soap request + add parameters
+
+
+        skor.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                music.stop();
+                Intent intent = new Intent(MainActivity.this, Scores.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
 
         final ProgressDialog ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...",	"Updating Questions ...", true);
         ringProgressDialog.setCancelable(true);

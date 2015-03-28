@@ -278,19 +278,19 @@ public class Game extends ActionBarActivity {
         gh=(ImageButton)findViewById(R.id.greenhelp);
         gh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                 boitheia("green");
+                 boitheia("green","tel");
             }  });
         rh=(ImageButton)findViewById(R.id.redhelp);
         rh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                boitheia("red");
+                boitheia("red","50");
             }  });
         bh=(ImageButton)findViewById(R.id.bluehelp);
         bh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //System.out.println("Button setting pauseflag 1");
-                boitheia("blue");
+                boitheia("blue","pub");
             }  });
 
 
@@ -540,11 +540,10 @@ public class Game extends ActionBarActivity {
 
 
 
-    public void boitheia(final String color){
+    public void boitheia(final String color, final String h){
     Random randomGenerator = new Random();
     System.out.println("Help="+game.help);
     int index = randomGenerator.nextInt(game.help.size());
-    String h = game.help.get(index);
     if (h.equals("tel")) {
         pauseflag = 1;
         dialog = new Dialog(Game.this);

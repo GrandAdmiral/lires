@@ -107,13 +107,13 @@
             android:layout_weight="1.5"/>
         <Button
             android:layout_width="0dp"
-            android:layout_height="30dp"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
             android:id="@+id/today"
             android:text="ΣΗΜΕΡΑ"
             android:textSize="10dp"
             android:background="@drawable/specialbutton"
-            android:textColor="#1a86d9"
+            android:textColor="#ffffff"
             android:state_pressed="false"
             />
         <Button
@@ -124,7 +124,7 @@
             android:text="ΕΒΔΟΜΑΔΙΑΙΑ"
             android:textSize="10dp"
             android:background="@drawable/mybuttonblue"
-            android:textColor="#fff"/>
+            android:textColor="#ffffff"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="fill_parent"
@@ -133,7 +133,7 @@
             android:text="ΓΕΝΙΚΑ"
             android:textSize="10dp"
             android:background="@drawable/mybuttonblue"
-            android:textColor="#fff"/>
+            android:textColor="#ffffff"/>
         <TextView
             android:gravity="right"
             android:layout_weight="1.5"
