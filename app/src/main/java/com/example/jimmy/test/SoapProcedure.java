@@ -108,7 +108,7 @@ public class SoapProcedure {
                         int score = Integer.parseInt(e.getProperty("ScoreAmount").toString());
                         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
                         Date date = df.parse(e.getProperty("UpdatedDate").toString());
-                        Player a = new Player(name, deviceid, timesplayed, date, score);
+                        Player a = new Player(name, deviceid, timesplayed, score);
                         Players.add(a);
                         //System.out.println(a.text);
                     } catch (Exception e) {

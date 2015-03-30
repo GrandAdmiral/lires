@@ -13,7 +13,7 @@ public class Player implements Serializable {
     public Date updateddate;
     public int ScoreAmount;
 
-    public Player(String name, String deviceid, int timesplayed, Date updateddate, int scoreAmount) {
+    public Player(String name, String deviceid, int timesplayed, int scoreAmount) {
         this.name = name;
         this.deviceid = deviceid;
         this.timesplayed = timesplayed;

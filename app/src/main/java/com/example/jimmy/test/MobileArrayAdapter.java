@@ -31,7 +31,7 @@ public class MobileArrayAdapter extends ArrayAdapter<Player> {
         TextView name = (TextView) rowView.findViewById(R.id.scorename);
         TextView score = (TextView) rowView.findViewById(R.id.scorescore);
         name.setText(values[position].getName());
-        score.setText(values[position].getScoreAmount());
+        score.setText(String.valueOf(values[position].getScoreAmount()));
         // Change icon based on name
         String s = values[position].toString();
 
