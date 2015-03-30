@@ -5,6 +5,7 @@ package com.example.jimmy.test;
  */
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +31,11 @@ public class MobileArrayAdapter extends ArrayAdapter<Player> {
         View rowView = inflater.inflate(R.layout.list_mobile, parent, false);
         TextView name = (TextView) rowView.findViewById(R.id.scorename);
         TextView score = (TextView) rowView.findViewById(R.id.scorescore);
-        name.setText(values[position].getName());
-        score.setText(String.valueOf(values[position].getScoreAmount()));
+        int position1=position+1;
+        String s1="<![<FONT COLOR=\"#515045\">"+position1+".  "+values[position].getName()+"</FONT>";
+        String s2="<![<FONT COLOR=\"#515045\">"+String.valueOf(values[position].getScoreAmount())+"  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
+        name.setText(Html.fromHtml(s1));
+        score.setText(Html.fromHtml(s2));
         // Change icon based on name
         String s = values[position].toString();
 

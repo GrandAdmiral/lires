@@ -28,6 +28,8 @@ public class SoapProcedure {
 
     private static String SOAP_ACTION4 = "http://tempuri.org/CreatePlayer";
 
+    private static String SOAP_ACTION5 = "http://tempuri.org/GetTop100";
+
     private static String NAMESPACE = "http://tempuri.org/";
 
     private static String METHOD_NAME1 = "GetAllQuestions";
@@ -37,6 +39,8 @@ public class SoapProcedure {
     private static String METHOD_NAME3 = "ScoreSubmissionWithFullScore";
 
     private static String METHOD_NAME4 = "CreatePlayer";
+
+    private static String METHOD_NAME5 = "GetTop100";
 
     private static String URL = "http://test.kypriakeslires.com/WS.asmx?";
 
@@ -173,5 +177,78 @@ public class SoapProcedure {
         }
 
     }
+
+    public ArrayList<ArrayList<Player>> getTop(String uuid){
+        ArrayList<Player> alltime = new ArrayList<Player>();
+        ArrayList<Player> weekly = new ArrayList<Player>();
+        ArrayList<Player> today = new ArrayList<Player>();
+        ArrayList<ArrayList<Player>> scores = new ArrayList<ArrayList<Player>>();
+        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME5);
+        request.addProperty("username", "jimmys");
+        request.addProperty("password", "aek");
+        request.addProperty("uiid", uuid);
+        request.addProperty("date", "");
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        System.out.println(request.toString());
+        envelope.setOutputSoapObject(request);
+        envelope.dotNet = true;
+        HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+        try {
+            androidHttpTransport.call(SOAP_ACTION5, envelope);
+            SoapObject result = null;
+            result = (SoapObject) envelope.getResponse();
+
+            if (result != null) {
+                int i;
+                System.out.println("Result Property count="+result.getPropertyCount());
+                for (i = 0; i < result.getPropertyCount(); i++) {
+                    try {
+
+                        SoapObject e = (SoapObject) result.getProperty(i);
+                        System.out.println("E count="+e.getPropertyCount());
+                        System.out.println("Processing property" + i);
+
+                            for (int j = 0; j < e.getPropertyCount(); j++) {
+                                SoapObject f = (SoapObject) e.getProperty(j);
+                                System.out.println("F count="+f.getPropertyCount());
+
+                                 //for (int k = 0; k < f.getPropertyCount(); k++) {
+                                    //SoapObject ela = (SoapObject) f.getProperty(k);
+                                    String name = f.getProperty("Name").toString();
+                                    System.out.println("Name="+name);
+                                    int score1 = Integer.parseInt(f.getProperty("ScoreAmount").toString());
+                                    Player a = new Player(name, score1);
+                                    if (i == 0) {
+                                        alltime.add(a);
+                                        if (j==99) System.out.println("Alltime! "+alltime.toString());
+                                    } else if (i == 1) {
+                                        System.out.println("Adding in weekly");
+                                        weekly.add(a);
+                                    } else if (i == 2) {
+                                        today.add(a);
+                                    }
+                                }
+                        //    }
+                        //System.out.println(a.text);
+                    } catch (Exception e) {
+                        System.out.println(e);
+
+                    }
+                }
+                System.out.println("Alltime="+alltime.toString());
+                scores.add(alltime);
+                scores.add(weekly);
+                scores.add(today);
+
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
+        return scores;
+
+    }
+
 
 }
