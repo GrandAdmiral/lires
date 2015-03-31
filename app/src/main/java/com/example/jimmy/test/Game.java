@@ -28,6 +28,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.transition.Slide;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
@@ -36,7 +38,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -48,6 +52,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -58,6 +63,7 @@ import java.util.Collections;
 import java.util.Random;
 import android.provider.Settings.Secure;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import org.w3c.dom.Text;
 
@@ -81,6 +87,7 @@ public class Game extends ActionBarActivity {
     private TextView red_sofar,green_sofar,blue_sofar,purple_sofar,orange_sofar,green_500,trial,trial2;
     private TextView green100,green200,green300,green500,orange1000,orange2000,orange3000,orange5000,red10000,red20000,red30000,red50000,purple100000,purple200000,purple300000;
     private TextView blue500,blue580,blue1000;
+    private TextSwitcher questtext2;
     private Button a1,a2,a3,a4,exittel,exitpub,gamw;
     private ImageButton gh,rh,bh;
     private DonutProgress donutProgress;
@@ -89,6 +96,7 @@ public class Game extends ActionBarActivity {
     private FrameLayout framework;
     private LinearLayout scores_sofar,layoutcontainer;
     private boolean isPanelShown;
+    private int flabutton1,flagbutton2,flagbutton3,flagbutton4;
     public String[] answers = {"1","2","3","4"};
     public MediaPlayer answertapped,correct,gamemusic,startmusic,wrongmusic;
 
@@ -132,6 +140,12 @@ public class Game extends ActionBarActivity {
         blue1000=(TextView)findViewById(R.id.blue_1000000);
         gamw= (Button) findViewById(R.id.gamwta);
 
+
+        flabutton1=0;
+        flagbutton2=0;
+        flagbutton3=0;
+        flagbutton4=0;
+
         scores_sofar.post(new Runnable() {
 
             @Override
@@ -164,7 +178,7 @@ public class Game extends ActionBarActivity {
         a1=(Button)findViewById(R.id.ans1);
         a1.setOnClickListener(new View.OnClickListener() {
             public void onClick(final View v) {
-                if (bflag == 0) {
+                if ((bflag == 0)&&(flabutton1==0)) {
                     bflag = 1;
                     gamemusic.pause();
                     answertapped.start();
@@ -191,7 +205,7 @@ public class Game extends ActionBarActivity {
         a2=(Button)findViewById(R.id.ans2);
         a2.setOnClickListener(new View.OnClickListener() {
             public void onClick(final View v) {
-                if (bflag == 0) {
+                if ((bflag == 0)&&(flagbutton2==0)) {
                     bflag=1;
                     gamemusic.pause();
                     answertapped.start();
@@ -218,7 +232,7 @@ public class Game extends ActionBarActivity {
         a3=(Button)findViewById(R.id.ans3);
         a3.setOnClickListener(new View.OnClickListener() {
             public void onClick(final View v) {
-                if (bflag == 0) {
+                if ((bflag == 0)&&(flagbutton3==0)) {
                     bflag=1;
                     gamemusic.pause();
                     answertapped.start();
@@ -246,7 +260,7 @@ public class Game extends ActionBarActivity {
         a4=(Button)findViewById(R.id.ans4);
         a4.setOnClickListener(new View.OnClickListener() {
             public void onClick(final View v) {
-                if (bflag == 0) {
+                if ((bflag == 0)&&(flagbutton4==0)) {
                     bflag = 1;
                     gamemusic.pause();
                     answertapped.start();
@@ -298,6 +312,7 @@ public class Game extends ActionBarActivity {
         donutProgress = (DonutProgress) findViewById(R.id.donut_progress);
         donutProgress.setMax(45);
         donutProgress.setProgress(45);
+        donutProgress.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, getResources().getDisplayMetrics()));
         voith = (TextView) findViewById(R.id.voith);
         voith.setText(Html.fromHtml(getString(R.string.voith_html)));
 
@@ -315,6 +330,25 @@ public class Game extends ActionBarActivity {
         Questions = gson.fromJson(user_json, new TypeToken<ArrayList<Question>>() {
         }.getType());
         questtext = (TextView) findViewById(R.id.questtext);
+        questtext2 = (TextSwitcher) findViewById(R.id.quest2);
+        final Animation out = new AlphaAnimation(0.0f, 1.0f);
+        out.setDuration(3000);
+        AnimationSet as = new AnimationSet(true);
+        as.addAnimation(out);
+        questtext2.setInAnimation(as);
+        questtext2.setFactory(new ViewSwitcher.ViewFactory() {
+                                  public View makeView() {
+                                      // TODO Auto-generated method stub
+                                      // create new textView and set the properties like clolr, size etc
+                                      TextView myText = new TextView(Game.this);
+                                      myText.setGravity(Gravity.CENTER);
+                                      //int pixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
+                                      myText.setTextSize(14);
+                                      myText.setTextColor(Color.WHITE);
+                                      return myText;
+                                  }
+                              });
+
         String android_id = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
         game.setPlayerid(android_id);
         game.setQuestions(Questions);
@@ -435,13 +469,23 @@ public class Game extends ActionBarActivity {
 
 
     public void setBoard(final Session game1){
-        questtext.setText(game1.questt);
-        String first = "<font color='#000000'>A. </font>";
-        String next = "<font color='#ffffff'>"+getAns(game1,answers[0])+"</font>";
-        a1.setText(Html.fromHtml(first + next));
+        questtext2.setText(game1.questt);
+        flabutton1=0;
+        flagbutton2=0;
+        flagbutton3=0;
+        flagbutton4=0;
+        a1.setText("");
         a2.setText("");
         a3.setText("");
         a4.setText("");
+        Handler handler4 = new Handler();
+        handler4.postDelayed(new Runnable() {
+            public void run() {
+                String first = "<font color='#000000'>A. </font>";
+                String next = "<font color='#ffffff'>"+getAns(game1,answers[0])+"</font>";
+                a1.setText(Html.fromHtml(first + next));
+            }
+        }, 3000);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -449,7 +493,7 @@ public class Game extends ActionBarActivity {
                 String next = "<font color='#ffffff'>"+getAns(game1,answers[1])+"</font>";
                 a2.setText(Html.fromHtml(first + next));
             }
-        }, 1500);
+        }, 4500);
         Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {
             public void run() {
@@ -457,7 +501,7 @@ public class Game extends ActionBarActivity {
                 String next = "<font color='#ffffff'>"+getAns(game1,answers[2])+"</font>";
                 a3.setText(Html.fromHtml(first + next));
             }
-        }, 3000);
+        }, 6000);
         Handler handler3 = new Handler();
         handler3.postDelayed(new Runnable() {
             public void run() {
@@ -465,7 +509,7 @@ public class Game extends ActionBarActivity {
                 String next = "<font color='#ffffff'>"+getAns(game1,answers[3])+"</font>";
                 a4.setText(Html.fromHtml(first + next));
             }
-        }, 4500);
+        }, 7500);
         a1.setBackgroundColor(Color.parseColor("#8a8a8a"));
         a2.setBackgroundColor(Color.parseColor("#8a8a8a"));
         a3.setBackgroundColor(Color.parseColor("#8a8a8a"));
@@ -594,15 +638,19 @@ public class Game extends ActionBarActivity {
         System.out.println("N="+n+"  ,N1="+n1);
         if ((n != 1) && (n1 != 1)) {
             a1.setText("               ");
+            flabutton1=1;
         }
         if ((n != 2) && (n1 != 2)) {
             a2.setText("               ");
+            flagbutton2=1;
         }
         if ((n != 3) && (n1 != 3)) {
             a3.setText("               ");
+            flagbutton3=1;
         }
         if ((n != 4) && (n1 != 4)) {
             a4.setText("               ");
+            flagbutton4=1;
         }
         game.help.remove("50");
         if (color.equals("green")){  gh.setVisibility(View.INVISIBLE);}
