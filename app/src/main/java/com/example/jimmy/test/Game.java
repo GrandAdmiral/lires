@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -99,6 +100,7 @@ public class Game extends ActionBarActivity {
     private int flabutton1,flagbutton2,flagbutton3,flagbutton4;
     public String[] answers = {"1","2","3","4"};
     public MediaPlayer answertapped,correct,gamemusic,startmusic,wrongmusic;
+    private int timer1flag,timer2flag,timer3flag;
 
 
 
@@ -107,7 +109,7 @@ public class Game extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
         Typeface font = Typeface.createFromAsset(getAssets(), "Roboto-Light.ttf");
-        musicflag=0;
+        musicflag=0; timer1flag=0; timer2flag=0; timer3flag=0;
         framework=(FrameLayout)findViewById(R.id.framework);
         layoutcontainer=(LinearLayout)findViewById(R.id.layoutContainer);
         rel1=(RelativeLayout)findViewById(R.id.rel1);
@@ -606,7 +608,7 @@ public class Game extends ActionBarActivity {
 
     public void boitheia(final String color, final String h){
     Random randomGenerator = new Random();
-    System.out.println("Help="+game.help);
+    System.out.println("Help=" + game.help);
     int index = randomGenerator.nextInt(game.help.size());
     if (h.equals("tel")) {
         pauseflag = 1;
@@ -1250,11 +1252,16 @@ protected void onPause() {
     protected void onStop() {
         super.onStop();
         System.out.println("Onstop is called");
-/*        if (gamemusic.isPlaying()) {
+        if (gamemusic.isPlaying()) {
             gamemusic.pause();
             musicflag=1;
 
-        }*/
+        }
+
+
+
+
+
     }
 
 @Override
@@ -1265,6 +1272,11 @@ protected void onResume(){
         musicflag=0;
     }
 }
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        System.out.println("On Destroy is called");
+    }
 
 Button counter(Button a){
   if (a.equals(a1)) return a11;
@@ -1272,7 +1284,11 @@ Button counter(Button a){
   if (a.equals(a3)) return a33;
     else return a44;
 }
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+    }
 }
 
 
