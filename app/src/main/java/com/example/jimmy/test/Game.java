@@ -88,7 +88,7 @@ public class Game extends ActionBarActivity {
     private TextView green100,green200,green300,green500,orange1000,orange2000,orange3000,orange5000,red10000,red20000,red30000,red50000,purple100000,purple200000,purple300000;
     private TextView blue500,blue580,blue1000;
     private TextSwitcher questtext2;
-    private Button a1,a2,a3,a4,exittel,exitpub,gamw;
+    private Button a1,a2,a3,a4,a11,a22,a33,a44,exittel,exitpub,gamw;
     private ImageButton gh,rh,bh;
     private DonutProgress donutProgress;
     private RelativeLayout hiddenPanel;
@@ -139,6 +139,11 @@ public class Game extends ActionBarActivity {
         blue580=(TextView)findViewById(R.id.blue_586509);
         blue1000=(TextView)findViewById(R.id.blue_1000000);
         gamw= (Button) findViewById(R.id.gamwta);
+        a11=(Button)findViewById(R.id.ans11);
+        a22=(Button)findViewById(R.id.ans22);
+        a33=(Button)findViewById(R.id.ans33);
+        a44=(Button)findViewById(R.id.ans44);
+
 
 
         flabutton1=0;
@@ -183,7 +188,7 @@ public class Game extends ActionBarActivity {
                     gamemusic.pause();
                     answertapped.start();
                     pauseflag=1;
-                    a1.setBackgroundColor(Color.parseColor("#1a86d9"));
+                    a1.setBackgroundResource(R.drawable.mybuttonblue);
                     right = (game.ca.equals(answers[0]));
                     final Button wrong;
                     if (!right) {
@@ -210,7 +215,7 @@ public class Game extends ActionBarActivity {
                     gamemusic.pause();
                     answertapped.start();
                     pauseflag=1;
-                    a2.setBackgroundColor(Color.parseColor("#1a86d9"));
+                    a2.setBackgroundResource(R.drawable.mybuttonblue);
                     right= (game.ca.equals(answers[1]));
                     final Button wrong;
                     if (!right) {
@@ -237,7 +242,7 @@ public class Game extends ActionBarActivity {
                     gamemusic.pause();
                     answertapped.start();
                     pauseflag=1;
-                    a3.setBackgroundColor(Color.parseColor("#1a86d9"));
+                    a3.setBackgroundResource(R.drawable.mybuttonblue);
                     right= (game.ca.equals(answers[2]));
                     final Button wrong;
                     if (!right) {
@@ -265,7 +270,7 @@ public class Game extends ActionBarActivity {
                     gamemusic.pause();
                     answertapped.start();
                     pauseflag=1;
-                    a4.setBackgroundColor(Color.parseColor("#1a86d9"));
+                    a4.setBackgroundResource(R.drawable.mybuttonblue);
                     right= (game.ca.equals(answers[3]));
                     final Button wrong;
                     if (!right) {
@@ -474,10 +479,14 @@ public class Game extends ActionBarActivity {
         flagbutton2=0;
         flagbutton3=0;
         flagbutton4=0;
+        a11.setText("");
         a1.setText("");
         a2.setText("");
+        a22.setText("");
         a3.setText("");
+        a33.setText("");
         a4.setText("");
+        a44.setText("");
         Handler handler4 = new Handler();
         handler4.postDelayed(new Runnable() {
             public void run() {
@@ -510,10 +519,21 @@ public class Game extends ActionBarActivity {
                 a4.setText(Html.fromHtml(first + next));
             }
         }, 7500);
-        a1.setBackgroundColor(Color.parseColor("#8a8a8a"));
-        a2.setBackgroundColor(Color.parseColor("#8a8a8a"));
-        a3.setBackgroundColor(Color.parseColor("#8a8a8a"));
-        a4.setBackgroundColor(Color.parseColor("#8a8a8a"));
+        a1.setBackgroundResource(R.drawable.mybuttonanswer);
+        a11.setBackgroundResource(R.drawable.mybuttonanswer);
+        a2.setBackgroundResource(R.drawable.mybuttonanswer);
+        a22.setBackgroundResource(R.drawable.mybuttonanswer);
+        a33.setBackgroundResource(R.drawable.mybuttonanswer);
+        a3.setBackgroundResource(R.drawable.mybuttonanswer);
+        a4.setBackgroundResource(R.drawable.mybuttonanswer);
+        a44.setBackgroundResource(R.drawable.mybuttonanswer);
+        AlphaAnimation transparency = new AlphaAnimation(0, 1);
+        transparency.setDuration(1);
+        transparency.setFillAfter(true);
+        a1.startAnimation(transparency);
+        a2.startAnimation(transparency);
+        a3.startAnimation(transparency);
+        a4.startAnimation(transparency);
     }
 
 
@@ -842,19 +862,54 @@ public class Game extends ActionBarActivity {
 
 
 public void changeColor(final Button but, final String answ23,final Boolean right, final Button wrong,final View v) {
+
+    if (right) {
+        counter(but).setBackgroundResource(R.drawable.mybuttongreen);
+        counter(but).setText(but.getText());
+        AlphaAnimation transparency = new AlphaAnimation(1, 0);
+        transparency.setDuration(800);
+        transparency.setFillAfter(true);
+        but.startAnimation(transparency);
+        scoreAnimation(v,answ23);
+        correct.start();
+    }
+
+    else {
+        counter(but).setBackgroundResource(R.drawable.mybuttonred);
+        counter(wrong).setBackgroundResource(R.drawable.mybuttongreen);
+        counter(but).setText(but.getText());
+        counter(wrong).setText(wrong.getText());
+        AlphaAnimation transparency = new AlphaAnimation(1, 0);
+        transparency.setDuration(800);
+        transparency.setFillAfter(true);
+        but.startAnimation(transparency);
+        wrong.startAnimation(transparency);
+        Handler handler4 = new Handler();
+        handler4.postDelayed(new Runnable() {
+            public void run() {
+                wrongmusic.start();
+                controller(game, answ23);
+            }
+        }, 2000);
+
+
+    }
+
+/*
+
     ColorDrawable buttonColor = (ColorDrawable) but.getBackground();
     int colorId = buttonColor.getColor();
     final String strColor = String.format("#%06X", 0xFFFFFF & colorId);
     final float[] from = new float[3],
             to =   new float[3];
 
-    Color.colorToHSV(Color.parseColor(strColor), from);   // from white
-    Color.colorToHSV(Color.parseColor("#6b6b6b"), to);     // to red
+    Color.colorToHSV(Color.parseColor(strColor), from);
+    Color.colorToHSV(Color.parseColor("#6b6b6b"), to);
 
-    ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
-    anim.setDuration(800);                              // for 300 ms
+    ValueAnimator anim = ValueAnimator.ofFloat(0, 1);
+    anim.setDuration(800);
 
-    final float[] hsv  = new float[3];                  // transition color
+    final float[] hsv  = new float[3];
     anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(){
         @Override public void onAnimationUpdate(ValueAnimator animation) {
             // Transition along each axis of HSV (hue, saturation, value)
@@ -930,7 +985,7 @@ public void changeColor(final Button but, final String answ23,final Boolean righ
     });
     anim.start();
 
-
+*/
 
 }
 
@@ -1184,18 +1239,38 @@ public void reset(){
 @Override
 protected void onPause() {
     super.onPause();
+    System.out.println("Onpaused is called");
     if (gamemusic.isPlaying()) {
         gamemusic.pause();
         musicflag=1;
 
     }
 }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.out.println("Onstop is called");
+/*        if (gamemusic.isPlaying()) {
+            gamemusic.pause();
+            musicflag=1;
+
+        }*/
+    }
+
+@Override
 protected void onResume(){
     super.onResume();
     if (musicflag==1) {
         gamemusic.start();
         musicflag=0;
     }
+}
+
+Button counter(Button a){
+  if (a.equals(a1)) return a11;
+  if (a.equals(a2)) return a22;
+  if (a.equals(a3)) return a33;
+    else return a44;
 }
 
 }

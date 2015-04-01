@@ -16,13 +16,13 @@
 
     <string name="pame_html">
         <![CDATA[
-<FONT COLOR="#FFF">ΠΑΜΕ</FONT>
+<FONT COLOR="#FFFFFF">ΠΑΜΕ</FONT>
         ]]>
     </string>
 
     <string name="skor_html">
         <![CDATA[
-<FONT COLOR="#FFF">ΣΚΟΡ</FONT>
+<FONT COLOR="#FFFFFF">ΣΚΟΡ</FONT>
         ]]>
     </string>
 

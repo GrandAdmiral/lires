@@ -93,7 +93,7 @@ public class MainActivity extends ActionBarActivity {
 
 
 
-        final ProgressDialog ringProgressDialog = ProgressDialog.show(MainActivity.this, "Please wait ...",	"Updating Questions ...", true);
+        final ProgressDialog ringProgressDialog = ProgressDialog.show(MainActivity.this, "Παρακαλώ περιμένετε...",	"Γίνεται ενημέρωση ερωτήσεων...", true);
         ringProgressDialog.setCancelable(true);
         new Thread(new Runnable() {
             @Override
