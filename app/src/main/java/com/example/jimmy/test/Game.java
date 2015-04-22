@@ -98,9 +98,12 @@ public class Game extends ActionBarActivity {
     private LinearLayout scores_sofar,layoutcontainer;
     private boolean isPanelShown;
     private int flabutton1,flagbutton2,flagbutton3,flagbutton4;
+    private int flaghelp1,flaghelp2,flaghelp3,stopflag,restartflag,flag501,flag502,flag503,flag504;
     public String[] answers = {"1","2","3","4"};
     public MediaPlayer answertapped,correct,gamemusic,startmusic,wrongmusic;
     private int timer1flag,timer2flag,timer3flag;
+    private View v1;
+    private String answ234;
 
 
 
@@ -152,6 +155,15 @@ public class Game extends ActionBarActivity {
         flagbutton2=0;
         flagbutton3=0;
         flagbutton4=0;
+        flaghelp1=0;
+        flaghelp2=0;
+        flaghelp3=0;
+        stopflag=0;
+        restartflag=0;
+        flag501=0;
+        flag502=0;
+        flag503=0;
+        flag504=0;
 
         scores_sofar.post(new Runnable() {
 
@@ -204,7 +216,7 @@ public class Game extends ActionBarActivity {
                         public void run() {
                             changeColor(a1, answers[0], right, wrong,v);
                         }
-                    }, 7000);
+                    }, game.getDelay()*1000);
 
                 }
             }
@@ -231,7 +243,7 @@ public class Game extends ActionBarActivity {
                         public void run() {
                             changeColor(a2,answers[1],right,wrong,v);
                         }
-                    }, 7000);
+                    }, game.getDelay()*1000);
 
                 }
             }
@@ -258,7 +270,7 @@ public class Game extends ActionBarActivity {
                         public void run() {
                             changeColor(a3,answers[2],right,wrong,v);
                         }
-                    }, 7000);
+                    }, game.getDelay()*1000);
                 }
             }
         });
@@ -286,7 +298,7 @@ public class Game extends ActionBarActivity {
                         public void run() {
                             changeColor(a4,answers[3],right,wrong,v);
                         }
-                    }, 7000);
+                    }, game.getDelay()*1000);
 
                 }
             }
@@ -299,18 +311,20 @@ public class Game extends ActionBarActivity {
         gh=(ImageButton)findViewById(R.id.greenhelp);
         gh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                 boitheia("green","tel");
+                if (bflag==0)
+                boitheia("green","tel");
             }  });
         rh=(ImageButton)findViewById(R.id.redhelp);
         rh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                if (bflag==0)
                 boitheia("red","50");
             }  });
         bh=(ImageButton)findViewById(R.id.bluehelp);
         bh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //System.out.println("Button setting pauseflag 1");
+                if (bflag==0)
                 boitheia("blue","pub");
             }  });
 
@@ -349,6 +363,7 @@ public class Game extends ActionBarActivity {
                                       // create new textView and set the properties like clolr, size etc
                                       TextView myText = new TextView(Game.this);
                                       myText.setGravity(Gravity.CENTER);
+                                      myText.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                                       //int pixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
                                       myText.setTextSize(14);
                                       myText.setTextColor(Color.WHITE);
@@ -359,6 +374,7 @@ public class Game extends ActionBarActivity {
         String android_id = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
         game.setPlayerid(android_id);
         game.setQuestions(Questions);
+        System.out.println("Questions ="+game.getQuestions());
         game.help = new ArrayList<String>(Arrays.asList("pub", "tel","50"));
         answertapped = MediaPlayer.create(context, R.raw.answertapped);
         correct = MediaPlayer.create(context, R.raw.correct);
@@ -380,6 +396,10 @@ public class Game extends ActionBarActivity {
             if (game.getFlag() < 1) {
 
                 System.out.println("Answer equals set the board");
+                    flag501=0;
+                    flag502=0;
+                    flag503=0;
+                    flag504=0;
                     randomizeAnswers(answers);
                     setBoard(game);
                     bflag=0;
@@ -494,7 +514,7 @@ public class Game extends ActionBarActivity {
             public void run() {
                 String first = "<font color='#000000'>A. </font>";
                 String next = "<font color='#ffffff'>"+getAns(game1,answers[0])+"</font>";
-                a1.setText(Html.fromHtml(first + next));
+                if (flag501==0) a1.setText(Html.fromHtml(first + next));
             }
         }, 3000);
         Handler handler = new Handler();
@@ -502,7 +522,7 @@ public class Game extends ActionBarActivity {
             public void run() {
                 String first = "<font color='#000000'>B. </font>";
                 String next = "<font color='#ffffff'>"+getAns(game1,answers[1])+"</font>";
-                a2.setText(Html.fromHtml(first + next));
+                if (flag502==0) a2.setText(Html.fromHtml(first + next));
             }
         }, 4500);
         Handler handler2 = new Handler();
@@ -510,7 +530,7 @@ public class Game extends ActionBarActivity {
             public void run() {
                 String first = "<font color='#000000'>Γ. </font>";
                 String next = "<font color='#ffffff'>"+getAns(game1,answers[2])+"</font>";
-                a3.setText(Html.fromHtml(first + next));
+                if (flag503==0) a3.setText(Html.fromHtml(first + next));
             }
         }, 6000);
         Handler handler3 = new Handler();
@@ -518,7 +538,7 @@ public class Game extends ActionBarActivity {
             public void run() {
                 String first = "<font color='#000000'>Δ. </font>";
                 String next = "<font color='#ffffff'>"+getAns(game1,answers[3])+"</font>";
-                a4.setText(Html.fromHtml(first + next));
+                if (flag504==0) a4.setText(Html.fromHtml(first + next));
             }
         }, 7500);
         a1.setBackgroundResource(R.drawable.mybuttonanswer);
@@ -590,12 +610,19 @@ public class Game extends ActionBarActivity {
                 @Override
                 public void onFinish() {
                     System.out.println("Timer1 cancelled interrupted");
+                    donutProgress.setProgress(0);
+                    gamemusic.pause();
                     if (pauseflag!=1) {
                         System.out.println("Time finished");
                         System.out.println("About to call controller from Timer onFinish");
                         right=false;
-                        controller(game, "5");
-                        pauseflag=0;
+                        if (stopflag!=1) {
+                            controller(game, "5");
+                            pauseflag = 0;
+                        }
+                        else{
+                            restartflag=1;
+                        }
                     }
                 }
             }.start();
@@ -659,18 +686,22 @@ public class Game extends ActionBarActivity {
         int n1 = find50(game,answers)[1]+1;
         System.out.println("N="+n+"  ,N1="+n1);
         if ((n != 1) && (n1 != 1)) {
+            flag501=1;
             a1.setText("               ");
             flabutton1=1;
         }
         if ((n != 2) && (n1 != 2)) {
+            flag502=1;
             a2.setText("               ");
             flagbutton2=1;
         }
         if ((n != 3) && (n1 != 3)) {
+            flag503=1;
             a3.setText("               ");
             flagbutton3=1;
         }
         if ((n != 4) && (n1 != 4)) {
+            flag504=1;
             a4.setText("               ");
             flagbutton4=1;
         }
@@ -872,7 +903,14 @@ public void changeColor(final Button but, final String answ23,final Boolean righ
         transparency.setDuration(800);
         transparency.setFillAfter(true);
         but.startAnimation(transparency);
-        scoreAnimation(v,answ23);
+        if (stopflag==0) {
+            scoreAnimation(v, answ23);
+        }
+        else{
+            restartflag=2;
+            v1=v;
+            answ234=answ23;
+        }
         correct.start();
     }
 
@@ -886,13 +924,22 @@ public void changeColor(final Button but, final String answ23,final Boolean righ
         transparency.setFillAfter(true);
         but.startAnimation(transparency);
         wrong.startAnimation(transparency);
-        Handler handler4 = new Handler();
-        handler4.postDelayed(new Runnable() {
-            public void run() {
-                wrongmusic.start();
-                controller(game, answ23);
-            }
-        }, 2000);
+        if (stopflag==0) {
+            Handler handler4 = new Handler();
+            handler4.postDelayed(new Runnable() {
+                public void run() {
+                    wrongmusic.start();
+                    controller(game, answ23);
+                }
+            }, 2000);
+
+        }
+        else{
+            restartflag=3;
+            v1=v;
+            answ234=answ23;
+        }
+
 
 
     }
@@ -1251,6 +1298,7 @@ protected void onPause() {
     @Override
     protected void onStop() {
         super.onStop();
+        stopflag=1;
         System.out.println("Onstop is called");
         if (gamemusic.isPlaying()) {
             gamemusic.pause();
@@ -1272,6 +1320,39 @@ protected void onResume(){
         musicflag=0;
     }
 }
+
+
+ @Override
+ protected  void onRestart(){
+     super.onRestart();
+     if (restartflag==1){
+         controller(game, "5");
+         pauseflag = 0;
+         musicflag=0;
+         donutProgress.setProgress(0);
+     }
+     if (restartflag==2) {
+         scoreAnimation(v1, answ234);
+
+     }
+
+     if (restartflag==3) {
+         Handler handler4 = new Handler();
+         handler4.postDelayed(new Runnable() {
+             public void run() {
+                 wrongmusic.start();
+                 controller(game, answ234);
+             }
+         }, 2000);
+     }
+
+    restartflag=0;
+    stopflag=0;
+ }
+
+
+
+
     @Override
     protected void onDestroy(){
         super.onDestroy();

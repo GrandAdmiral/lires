@@ -51,6 +51,15 @@ public class Scores extends Activity {
         String s2="<![<FONT COLOR=\"#515045\">"+score+"  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
         scoregmt.setText(Html.fromHtml(s2));
 
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(Scores.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
 
         weekly.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

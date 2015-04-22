@@ -17,6 +17,7 @@ public class Session {
     public ArrayList<Question> questions;
     public String questt,answ1,answ2,answ3,answ4,ca,sa;
     public int[] prize = {100,200,300,500,1000,2000,3000,5000,10000,20000,30000,50000,100000,200000,300000,500000,586509,1000000};
+    public int[] delay = {1,2,2,3,2,2,2,2,4,4,4,5,5,6,7,8,10,15};
     public ArrayList<String> help;
     public ArrayList<Integer> depository;
     public Session(){};
@@ -45,6 +46,10 @@ public class Session {
             }
         depository.add(q.getNumber());
         return q;
+    }
+
+    int getDelay(){
+        return delay[getCurrquest()-1];
     }
 
     ArrayList<Integer> getPercentages() {

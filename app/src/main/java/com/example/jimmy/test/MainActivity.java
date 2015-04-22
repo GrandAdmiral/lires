@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
@@ -41,12 +43,12 @@ public class MainActivity extends ActionBarActivity {
     public SoapObject e;
     public Question a;
     ProgressDialog barProgressDialog;
-    int num,diff;
-    public String btext,banswer1,banswer2,banswer3,banswer4,bcorrect,bsecond;
+    int num, diff;
+    public String btext, banswer1, banswer2, banswer3, banswer4, bcorrect, bsecond;
     public ArrayList<Question> Questions = new ArrayList<Question>();
     public ArrayList<Player> Players = new ArrayList<Player>();
-    private Button pame,skor,protaseis;
-    private TextView lires,scoremain3,scoremain4;
+    private Button pame, skor, protaseis;
+    private TextView lires, scoremain3, scoremain4,scoremain444;
     private static Context context;
     private MediaPlayer music;
 
@@ -60,8 +62,9 @@ public class MainActivity extends ActionBarActivity {
         }
         Typeface font = Typeface.createFromAsset(getAssets(), "Roboto-Light.ttf");
         scoremain4 = (TextView) findViewById(R.id.scoremain4);
+        scoremain444 = (TextView) findViewById(R.id.scoremain444);
         lires = (TextView) findViewById(R.id.lires);
-        Typeface fontlight=Typeface.createFromAsset(getAssets(),"Roboto-Bold.ttf");
+        Typeface fontlight = Typeface.createFromAsset(getAssets(), "Roboto-Bold.ttf");
         lires.setTypeface(fontlight);
         lires.setText(Html.fromHtml(getString(R.string.lires_html)));
         pame = (Button) findViewById(R.id.pame);
@@ -74,10 +77,21 @@ public class MainActivity extends ActionBarActivity {
 
         pame.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                music.stop();
-                Intent intent = new Intent(MainActivity.this, Game.class);
-                startActivity(intent);
-                finish();
+                SharedPreference sharedPreference= new SharedPreference();
+                String user_json = sharedPreference.getValue(context,"OP_PREFS","questionsdownloaded");
+                System.out.println("Checking Questions"+user_json);
+                if ((user_json!=null)) {
+                    if (user_json != "[]") {
+                        music.stop();
+                        Intent intent = new Intent(MainActivity.this, Game.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }else {
+                        Toast.makeText(getApplicationContext(), "Δεν έχουν αποθηκευτεί οι ερωτήσεις. Μάλλον δεν υπάρχει σύνδεση με το διαδίκτυο.", Toast.LENGTH_LONG).show();
+
+                    }
+
             }
         });
 
@@ -90,50 +104,52 @@ public class MainActivity extends ActionBarActivity {
                 finish();
             }
         });
+        System.out.println("Is online?"+isOnline());
+        if (isOnline()) {
+            final ProgressDialog ringProgressDialog = ProgressDialog.show(MainActivity.this, "Παρακαλώ περιμένετε...", "Γίνεται ενημέρωση ερωτήσεων...", true);
+            ringProgressDialog.setCancelable(true);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
 
+                        SharedPreference sharedPreference = new SharedPreference();
+                        SoapProcedure soap = new SoapProcedure();
+                        Questions = soap.qresult();
+                        //Players= soap.presult();
 
+                        String score = sharedPreference.getValue(context, "OP_PREFS", "score");
+                        System.out.println("Score at this point:" + score);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SharedPreference sharedPreference = new SharedPreference();
+                                String score = sharedPreference.getValue(context, "OP_PREFS", "score");
+                                String username=sharedPreference.getValue(context,"OP_PREFS", "username");
+                                String su= "<![<FONT COLOR=\"#515045\">" + username + "</FONT>";
+                                String s2 = "<![<FONT COLOR=\"#515045\">" + score + "  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
+                                scoremain4.setText(Html.fromHtml(s2));
+                                scoremain444.setText(Html.fromHtml(su));
+                            }
+                        });
 
-        final ProgressDialog ringProgressDialog = ProgressDialog.show(MainActivity.this, "Παρακαλώ περιμένετε...",	"Γίνεται ενημέρωση ερωτήσεων...", true);
-        ringProgressDialog.setCancelable(true);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
+                        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                                Settings.Secure.ANDROID_ID);
+                        String username = sharedPreference.getValue(context, "OP_PREFS", "username");
+                        String scoresofar = sharedPreference.getValue(context, "OP_PREFS", "scoresofar");
+                        soap.submitScore(username, android_id, scoresofar);
+                        System.out.println(context.toString());
 
-                    SharedPreference sharedPreference=new SharedPreference();
-                    SoapProcedure soap = new SoapProcedure();
-                    Questions = soap.qresult();
-                    //Players= soap.presult();
-
-                    String score = sharedPreference.getValue(context,"OP_PREFS","score");
-                    System.out.println("Score at this point:" + score);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            SharedPreference sharedPreference=new SharedPreference();
-                            String score = sharedPreference.getValue(context,"OP_PREFS","score");
-                            String s2="<![<FONT COLOR=\"#515045\">"+score+"  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
-                            scoremain4.setText(Html.fromHtml(s2));
-                        }
-                    });
-
-                    String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-                            Settings.Secure.ANDROID_ID);
-                    String username = sharedPreference.getValue(context,"OP_PREFS","username");
-                    String scoresofar = sharedPreference.getValue(context,"OP_PREFS","scoresofar");
-                    soap.submitScore(username,android_id,scoresofar);
-                    System.out.println(context.toString());
-
-                    Gson gson = new Gson();
-                    String user_json = gson.toJson(Questions);
-                    //String user_players=gson.toJson(Players);
-                    System.out.println(user_json);
-                    //System.out.println(user_players);
-                    SharedPreference sharedP=new SharedPreference();
-                    sharedP.save(getApplicationContext(),user_json,"OP_PREFS","questionsdownloaded");
-                    //sharedP.save(getApplicationContext(),user_players,"OP_PREFS","listofplayers");
-                    int temp=0;
-                    int i;
+                        Gson gson = new Gson();
+                        String user_json = gson.toJson(Questions);
+                        //String user_players=gson.toJson(Players);
+                        System.out.println(user_json);
+                        //System.out.println(user_players);
+                        SharedPreference sharedP = new SharedPreference();
+                        sharedP.save(getApplicationContext(), user_json, "OP_PREFS", "questionsdownloaded");
+                        //sharedP.save(getApplicationContext(),user_players,"OP_PREFS","listofplayers");
+                        int temp = 0;
+                        int i;
 
 
                     /*for (i=0; i<Players.size(); i++){
@@ -160,27 +176,29 @@ public class MainActivity extends ActionBarActivity {
                         }*/
 
 
-                }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
 
-               catch (Exception e) {
-                   System.out.println(e.getMessage());
-                   runOnUiThread(new Runnable() {
-                       public void run() {
-                           Toast.makeText(getApplicationContext(), "No Response",Toast.LENGTH_LONG).show();
-                       }
-                   });
+                    }
+                    ringProgressDialog.dismiss();
                 }
-                ringProgressDialog.dismiss();
-            }
-        }).start();
-
+            }).start();
+        }
+        else
+        {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Δεν υπάρχει σύνδεση με το διαδίκτυο.", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
         pame.post(new Runnable() {
 
             @Override
             public void run() {
-                context=getApplicationContext();
-                music= MediaPlayer.create(context, R.raw.start);
+                context = getApplicationContext();
+                music = MediaPlayer.create(context, R.raw.start);
                 music.setLooping(true);
                 music.start();
 
@@ -194,5 +212,12 @@ public class MainActivity extends ActionBarActivity {
     protected void onPause() {
         super.onPause();
 
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }
