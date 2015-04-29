@@ -58,6 +58,10 @@ private EditText editname;
                     SharedPreference sharedP=new SharedPreference();
                     sharedP.save(getApplicationContext(), "0", "OP_PREFS", "score");
                     sharedP.save(getApplicationContext(), editname.getText().toString(), "OP_PREFS", "username");
+                    sharedP.save(getApplicationContext(), "1", "OP_PREFS", "musicon");
+                    sharedP.save(getApplicationContext(), "1", "OP_PREFS", "syncon");
+                    sharedP.save(getApplicationContext(), "1", "OP_PREFS", "firsttime");
+                    System.out.println("Value="+sharedP.getValue(getApplicationContext(),"OP_PREFS","musicon"));
                     SoapProcedure soap = new SoapProcedure();
                     String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                             Settings.Secure.ANDROID_ID);

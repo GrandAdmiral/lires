@@ -18,8 +18,8 @@
     <TextView
         android:id="@+id/finalscore"
         android:text="500"
-        android:textSize="30dp"
-        android:textColor="#7e4881"
+        android:textSize="20dp"
+        android:textColor="#515045"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -33,15 +33,30 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         />
-    <Button
-        android:layout_width="200dp"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.2"/>
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
         android:layout_weight="1"
         android:id="@+id/goagain"
         android:text="ΠΑΜΕ ΞΑΝΑ!"
         android:textSize="25dp"
-        android:background="@drawable/mybuttonblue"
+        android:background="@drawable/mybuttongreen"
         android:textColor="#fff"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.2"/>
+    </LinearLayout>
+
     <TextView
         android:id="@+id/finalscore14"
         android:text=""
@@ -51,16 +66,29 @@
         android:layout_height="0dp"
         android:layout_weight="0.2"
         />
-    <Button
-        android:layout_width="200dp"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.2"/>
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
         android:layout_weight="1"
         android:id="@+id/goback"
         android:text="ΠΙΣΩ"
         android:textSize="25dp"
         android:background="@drawable/mybuttonred"
         android:textColor="#fff"/>
-    <TextView
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.2"/>
+    </LinearLayout>
+        <TextView
         android:id="@+id/finalscore15"
         android:text=""
         android:textSize="30dp"

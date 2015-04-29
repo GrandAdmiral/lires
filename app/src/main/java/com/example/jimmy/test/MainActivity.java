@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -47,10 +48,12 @@ public class MainActivity extends ActionBarActivity {
     public String btext, banswer1, banswer2, banswer3, banswer4, bcorrect, bsecond;
     public ArrayList<Question> Questions = new ArrayList<Question>();
     public ArrayList<Player> Players = new ArrayList<Player>();
-    private Button pame, skor, protaseis;
+    private Button pame, protaseis;
+    private ImageButton skor,togglesound,togglesync,feedback,settings;
     private TextView lires, scoremain3, scoremain4,scoremain444;
     private static Context context;
     private MediaPlayer music;
+    private boolean musicon,syncon,firsttime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,12 @@ public class MainActivity extends ActionBarActivity {
             StrictMode.setThreadPolicy(policy);
         }
         Typeface font = Typeface.createFromAsset(getAssets(), "Roboto-Light.ttf");
+        SharedPreference sharedP = new SharedPreference();
+        //if (sharedP.getValue(context, "OP_PREFS", "musicon").equals("1")) { musicon=true;}
+        //if (sharedP.getValue(context, "OP_PREFS", "syncon").equals("1")) { syncon=true;}
+        if (sharedP.getValue(getApplicationContext(),"OP_PREFS","musicon").equals("1")) {musicon=true;} else {musicon=false;}
+        if (sharedP.getValue(getApplicationContext(),"OP_PREFS","firsttime").equals("1")) {firsttime=true;} else {firsttime=false;}
+        if (sharedP.getValue(getApplicationContext(),"OP_PREFS","syncon").equals("1")) {syncon=true;} else {syncon=false;}
         scoremain4 = (TextView) findViewById(R.id.scoremain4);
         scoremain444 = (TextView) findViewById(R.id.scoremain444);
         lires = (TextView) findViewById(R.id.lires);
@@ -70,9 +79,14 @@ public class MainActivity extends ActionBarActivity {
         pame = (Button) findViewById(R.id.pame);
         pame.setTypeface(font);
         pame.setText(Html.fromHtml(getString(R.string.pame_html)));
-        skor = (Button) findViewById(R.id.skor);
-        skor.setText(Html.fromHtml(getString(R.string.skor_html)));
-        skor.setTypeface(font);
+        skor = (ImageButton) findViewById(R.id.gotoscore);
+        togglesound=(ImageButton)findViewById(R.id.togglesound);
+        togglesync=(ImageButton)findViewById(R.id.togglesync);
+        settings=(ImageButton)findViewById(R.id.gotosettings);
+        if (!musicon) togglesound.setAlpha(0.5f);
+        if (!syncon) togglesync.setAlpha(0.5f);
+
+
 
 
         pame.setOnClickListener(new View.OnClickListener() {
@@ -104,53 +118,62 @@ public class MainActivity extends ActionBarActivity {
                 finish();
             }
         });
+
+        togglesound.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dothemusic();
+            }
+        });
+        togglesync.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dothesync();
+            }
+        });
+        SharedPreference sharedPreference = new SharedPreference();
+        String score = sharedPreference.getValue(getApplicationContext(), "OP_PREFS", "score");
+        String username=sharedPreference.getValue(getApplicationContext(),"OP_PREFS", "username");
+        String su= "<![<FONT COLOR=\"#515045\">" + username + "</FONT>";
+        String s2 = "<![<FONT COLOR=\"#515045\">" + score + "  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
+        scoremain4.setText(Html.fromHtml(s2));
+        scoremain444.setText(Html.fromHtml(su));
+
         System.out.println("Is online?"+isOnline());
-        if (isOnline()) {
-            final ProgressDialog ringProgressDialog = ProgressDialog.show(MainActivity.this, "Παρακαλώ περιμένετε...", "Γίνεται ενημέρωση ερωτήσεων...", true);
-            ringProgressDialog.setCancelable(true);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
+        if ((isOnline())) {
+            if ((syncon) || (firsttime)) {
+                final ProgressDialog ringProgressDialog = ProgressDialog.show(MainActivity.this, "Παρακαλώ περιμένετε...", "Γίνεται ενημέρωση ερωτήσεων...", true);
+                ringProgressDialog.setCancelable(true);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
 
-                        SharedPreference sharedPreference = new SharedPreference();
-                        SoapProcedure soap = new SoapProcedure();
-                        Questions = soap.qresult();
-                        //Players= soap.presult();
+                            SharedPreference sharedPreference = new SharedPreference();
+                            SoapProcedure soap = new SoapProcedure();
+                            Questions = soap.qresult();
+                            //Players= soap.presult();
 
-                        String score = sharedPreference.getValue(context, "OP_PREFS", "score");
-                        System.out.println("Score at this point:" + score);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                SharedPreference sharedPreference = new SharedPreference();
-                                String score = sharedPreference.getValue(context, "OP_PREFS", "score");
-                                String username=sharedPreference.getValue(context,"OP_PREFS", "username");
-                                String su= "<![<FONT COLOR=\"#515045\">" + username + "</FONT>";
-                                String s2 = "<![<FONT COLOR=\"#515045\">" + score + "  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
-                                scoremain4.setText(Html.fromHtml(s2));
-                                scoremain444.setText(Html.fromHtml(su));
-                            }
-                        });
+                            String score = sharedPreference.getValue(context, "OP_PREFS", "score");
+                            System.out.println("Score at this point:" + score);
 
-                        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-                                Settings.Secure.ANDROID_ID);
-                        String username = sharedPreference.getValue(context, "OP_PREFS", "username");
-                        String scoresofar = sharedPreference.getValue(context, "OP_PREFS", "scoresofar");
-                        soap.submitScore(username, android_id, scoresofar);
-                        System.out.println(context.toString());
+                            String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                                    Settings.Secure.ANDROID_ID);
+                            String username = sharedPreference.getValue(context, "OP_PREFS", "username");
+                            String scoresofar = sharedPreference.getValue(context, "OP_PREFS", "scoresofar");
+                            soap.submitScore(username, android_id, scoresofar);
+                            System.out.println(context.toString());
 
-                        Gson gson = new Gson();
-                        String user_json = gson.toJson(Questions);
-                        //String user_players=gson.toJson(Players);
-                        System.out.println(user_json);
-                        //System.out.println(user_players);
-                        SharedPreference sharedP = new SharedPreference();
-                        sharedP.save(getApplicationContext(), user_json, "OP_PREFS", "questionsdownloaded");
-                        //sharedP.save(getApplicationContext(),user_players,"OP_PREFS","listofplayers");
-                        int temp = 0;
-                        int i;
-
+                            Gson gson = new Gson();
+                            String user_json = gson.toJson(Questions);
+                            //String user_players=gson.toJson(Players);
+                            System.out.println(user_json);
+                            //System.out.println(user_players);
+                            SharedPreference sharedP = new SharedPreference();
+                            sharedP.save(getApplicationContext(), user_json, "OP_PREFS", "questionsdownloaded");
+                            //sharedP.save(getApplicationContext(),user_players,"OP_PREFS","listofplayers");
+                            int temp = 0;
+                            int i;
+                            firsttime = false;
+                            sharedP.save(getApplicationContext(), "0", "OP_PREFS", "firsttime");
 
                     /*for (i=0; i<Players.size(); i++){
                             if (Players.get(i).deviceid.equals(android_id)){
@@ -176,13 +199,22 @@ public class MainActivity extends ActionBarActivity {
                         }*/
 
 
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
 
+                        }
+                        ringProgressDialog.dismiss();
                     }
-                    ringProgressDialog.dismiss();
-                }
-            }).start();
+                }).start();
+            } else {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        System.out.println("Syncon:"+syncon);
+                        System.out.println("Firsttime:"+firsttime);
+                        Toast.makeText(getApplicationContext(), "Ο συγχρονισμός ερωτήσεων είναι απενεργοποιημένος.", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
         }
         else
         {
@@ -200,7 +232,7 @@ public class MainActivity extends ActionBarActivity {
                 context = getApplicationContext();
                 music = MediaPlayer.create(context, R.raw.start);
                 music.setLooping(true);
-                music.start();
+                if (musicon) music.start();
 
             }
         });
@@ -220,4 +252,41 @@ public class MainActivity extends ActionBarActivity {
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
+
+public void dothemusic(){
+    if (musicon) {
+        //togglesound.getBackground().setAlpha(252);
+        SharedPreference sharedPreference= new SharedPreference();
+        sharedPreference.save(getApplicationContext(), "0", "OP_PREFS", "musicon");
+        togglesound.setAlpha(0.5f);
+        musicon=false;
+        music.stop();
+    }
+    else{
+        SharedPreference sharedPreference= new SharedPreference();
+        sharedPreference.save(getApplicationContext(), "1", "OP_PREFS", "musicon");
+        togglesound.setAlpha(1f);
+        musicon=true;
+        context = getApplicationContext();
+        music = new MediaPlayer();
+        music = MediaPlayer.create(context, R.raw.start);
+        music.setLooping(true);
+        music.start();
+    }
+}
+    public void dothesync(){
+        if (syncon) {
+            //togglesound.getBackground().setAlpha(252);
+            SharedPreference sharedPreference= new SharedPreference();
+            sharedPreference.save(getApplicationContext(), "0", "OP_PREFS", "syncon");
+            togglesync.setAlpha(0.5f);
+        }
+        else{
+            SharedPreference sharedPreference= new SharedPreference();
+            sharedPreference.save(getApplicationContext(), "1", "OP_PREFS", "syncon");
+            togglesync.setAlpha(1f);
+            syncon=true;
+        }
+    }
+
 }
