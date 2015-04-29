@@ -85,7 +85,9 @@ public class MainActivity extends ActionBarActivity {
         settings=(ImageButton)findViewById(R.id.gotosettings);
         if (!musicon) togglesound.setAlpha(0.5f);
         if (!syncon) togglesync.setAlpha(0.5f);
-
+        String android_id1 = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        System.out.println("Device ID is: "+android_id1);
 
 
 
@@ -114,6 +116,15 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 music.stop();
                 Intent intent = new Intent(MainActivity.this, Scores.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                music.stop();
+                Intent intent = new Intent(MainActivity.this, SettingsLires.class);
                 startActivity(intent);
                 finish();
             }

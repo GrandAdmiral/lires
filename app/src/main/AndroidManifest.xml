@@ -41,6 +41,13 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             >
         </activity>
+        <activity
+            android:name=".SettingsLires"
+            android:label="Test"
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            >
+        </activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
