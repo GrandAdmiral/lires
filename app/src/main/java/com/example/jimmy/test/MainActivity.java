@@ -162,17 +162,6 @@ public class MainActivity extends ActionBarActivity {
                             SoapProcedure soap = new SoapProcedure();
                             Questions = soap.qresult();
                             //Players= soap.presult();
-
-                            String score = sharedPreference.getValue(context, "OP_PREFS", "score");
-                            System.out.println("Score at this point:" + score);
-
-                            String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-                                    Settings.Secure.ANDROID_ID);
-                            String username = sharedPreference.getValue(context, "OP_PREFS", "username");
-                            String scoresofar = sharedPreference.getValue(context, "OP_PREFS", "scoresofar");
-                            soap.submitScore(username, android_id, scoresofar);
-                            System.out.println(context.toString());
-
                             Gson gson = new Gson();
                             String user_json = gson.toJson(Questions);
                             //String user_players=gson.toJson(Players);

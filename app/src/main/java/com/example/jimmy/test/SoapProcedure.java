@@ -126,16 +126,16 @@ public class SoapProcedure {
     }
 
 
-    public void submitScore(String name, String uuid, String scoreSoFar) {
+    public SoapObject submitScore(String name, String uuid, String scoreSoFar) {
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME3);
+        SoapObject result = null;
         request.addProperty("username", "jimmys");
         request.addProperty("password", "aek");
-
         request.addProperty("name", name);
-        request.addProperty("uuid", uuid);
+        request.addProperty("uiid", uuid);
         request.addProperty("scoresSoFar", scoreSoFar);
-        request.addProperty("fullScore", 0);
-        request.addProperty("maxLevel", 0);
+        request.addProperty("fullScore", "0");
+        request.addProperty("maxLevel", "0");
         //0;0;20121212;####0;1;20121212;####500;6;20121212;####
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         System.out.println(request.toString());
@@ -145,13 +145,15 @@ public class SoapProcedure {
 
         try {
             androidHttpTransport.call(SOAP_ACTION3, envelope);
-            SoapObject result = null;
             result = (SoapObject) envelope.getResponse();
+            System.out.println("Result:"+result.toString());
         } catch (Exception e) {
-
+            System.out.println("Exception:"+e);
 
         }
 
+        System.out.println("Submission successful??");
+    return result;
     }
 
 
@@ -171,8 +173,9 @@ public class SoapProcedure {
             androidHttpTransport.call(SOAP_ACTION4, envelope);
             SoapObject result = null;
             result = (SoapObject) envelope.getResponse();
+            System.out.println("Result:"+result.toString());
         } catch (Exception e) {
-
+        System.out.println("Exception:"+e);
 
         }
 
@@ -182,6 +185,7 @@ public class SoapProcedure {
         ArrayList<Player> alltime = new ArrayList<Player>();
         ArrayList<Player> weekly = new ArrayList<Player>();
         ArrayList<Player> today = new ArrayList<Player>();
+        ArrayList<Player> individual = new ArrayList<Player>();
         ArrayList<ArrayList<Player>> scores = new ArrayList<ArrayList<Player>>();
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME5);
         request.addProperty("username", "jimmys");
@@ -218,15 +222,19 @@ public class SoapProcedure {
                                     String name = f.getProperty("Name").toString();
                                     System.out.println("Name="+name);
                                     int score1 = Integer.parseInt(f.getProperty("ScoreAmount").toString());
-                                    Player a = new Player(name, score1);
+                                    int pos = Integer.parseInt(f.getProperty("Position").toString());
+                                    Player a = new Player(name, score1,pos);
                                     if (i == 0) {
                                         alltime.add(a);
                                         if (j==99) System.out.println("Alltime! "+alltime.toString());
                                     } else if (i == 1) {
                                         System.out.println("Adding in weekly");
-                                        weekly.add(a);
-                                    } else if (i == 2) {
                                         today.add(a);
+                                    } else if (i == 2) {
+                                        weekly.add(a);
+                                    }
+                                    else if (i==3) {
+                                        individual.add(a);
                                     }
                                 }
                         //    }
@@ -237,9 +245,13 @@ public class SoapProcedure {
                     }
                 }
                 System.out.println("Alltime="+alltime.toString());
+                System.out.println("weekly=" + weekly.toString());
+                System.out.println("today=" + today.toString());
+                System.out.println("Individual=" + individual.toString());
                 scores.add(alltime);
                 scores.add(weekly);
                 scores.add(today);
+                scores.add(individual);
 
             }
         } catch (Exception e) {

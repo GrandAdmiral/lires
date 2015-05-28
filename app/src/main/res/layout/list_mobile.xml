@@ -8,7 +8,8 @@
     android:layout_width="0dp"
     android:layout_height="fill_parent"
     android:layout_weight="2.5"
-    android:text="323"/>
+    android:text="323"
+    android:textColor="#515045"/>
 
     <TextView
     android:id="@+id/scorescore"
@@ -16,7 +17,8 @@
     android:layout_width="0dp"
     android:layout_height="fill_parent"
     android:layout_weight="1"
-    android:text="323"/>
+    android:text="323"
+        android:textColor="#515045"/>
 
 
 

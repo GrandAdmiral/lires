@@ -1,7 +1,9 @@
 package com.example.jimmy.test;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -55,25 +57,47 @@ private EditText editname;
             entername.setVisibility(View.VISIBLE);
             pushname.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    SharedPreference sharedP=new SharedPreference();
-                    sharedP.save(getApplicationContext(), "0", "OP_PREFS", "score");
-                    sharedP.save(getApplicationContext(), editname.getText().toString(), "OP_PREFS", "username");
-                    sharedP.save(getApplicationContext(), "1", "OP_PREFS", "musicon");
-                    sharedP.save(getApplicationContext(), "1", "OP_PREFS", "syncon");
-                    sharedP.save(getApplicationContext(), "1", "OP_PREFS", "firsttime");
-                    System.out.println("Value="+sharedP.getValue(getApplicationContext(),"OP_PREFS","musicon"));
-                    SoapProcedure soap = new SoapProcedure();
-                    String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
-                            Settings.Secure.ANDROID_ID);
-                    soap.createPlayer(editname.getText().toString(),android_id);
-                    Intent intent = new Intent(landingscreen.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    final ProgressDialog ringProgressDialog = ProgressDialog.show(landingscreen.this, "Παρακαλώ περιμένετε...", "Γίνεται εγγραφή νέου χρήστη...", true);
+                    ringProgressDialog.setCancelable(true);
+                    ringProgressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            Intent intent = new Intent(landingscreen.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                SharedPreference sharedP = new SharedPreference();
+                                sharedP.save(getApplicationContext(), "0", "OP_PREFS", "score");
+                                sharedP.save(getApplicationContext(), editname.getText().toString(), "OP_PREFS", "username");
+                                sharedP.save(getApplicationContext(), "1", "OP_PREFS", "musicon");
+                                sharedP.save(getApplicationContext(), "1", "OP_PREFS", "syncon");
+                                sharedP.save(getApplicationContext(), "1", "OP_PREFS", "firsttime");
+                                System.out.println("Value=" + sharedP.getValue(getApplicationContext(), "OP_PREFS", "musicon"));
+                                SoapProcedure soap = new SoapProcedure();
+                                String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                                        Settings.Secure.ANDROID_ID);
+                                soap.createPlayer(editname.getText().toString(), android_id);
+                                System.out.println("Creating player (" + editname.getText().toString() + "," + android_id);
+
+
+                            } catch (Exception e) {
+                                System.out.println("Couldn't create player:" + e);
+                            }
+
+                            ringProgressDialog.dismiss();
+                        }
+                    }).start();
+
+
                 }
-                });
+            });
         }
-
-
     }
-
 }
+
+

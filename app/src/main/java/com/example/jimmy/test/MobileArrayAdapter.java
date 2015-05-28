@@ -33,7 +33,7 @@ public class MobileArrayAdapter extends ArrayAdapter<Player> {
         TextView score = (TextView) rowView.findViewById(R.id.scorescore);
         int position1=position+1;
         String s1="<![<FONT COLOR=\"#515045\">"+position1+".  "+values[position].getName()+"</FONT>";
-        String s2="<![<FONT COLOR=\"#515045\">"+String.valueOf(values[position].getScoreAmount())+"  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
+        String s2="<![<FONT COLOR=\"#000000\">"+String.valueOf(values[position].getScoreAmount())+"  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
         name.setText(Html.fromHtml(s1));
         score.setText(Html.fromHtml(s2));
         // Change icon based on name

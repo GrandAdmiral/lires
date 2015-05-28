@@ -1,5 +1,7 @@
 package com.example.jimmy.test;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -60,7 +62,9 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.sql.Date;
 import java.util.Random;
 import android.provider.Settings.Secure;
 import android.widget.Toast;
@@ -75,6 +79,7 @@ public class Game extends ActionBarActivity {
     public ArrayList<String> help = new ArrayList<String>(Arrays.asList("pub", "tel", "50"));
     public Boolean right;
     public float x1, x2, x3, x4 = 0;
+    public int y1,y2,y3,y4=0;
     CountDownTimer a, timer2, timer3;
     final Session game = new Session();
     int bflag, aflag, pauseflag, sleepflag, musicflag;
@@ -85,6 +90,7 @@ public class Game extends ActionBarActivity {
     private Handler mHandler = new Handler();
     public ArrayList<Question> Questions;
     private TextView voith, questtext, textTimer, tel, anstel, publ, firstbar, firstwords, secondbar, secondwords, thirdbar, thirdwords, fourthbar, fourthwords;
+    private TextView firstscore, secondscore, thirdscore, fourthscore;
     private TextView red_sofar, green_sofar, blue_sofar, purple_sofar, orange_sofar, green_500, trial, trial2;
     private TextView green100, green200, green300, green500, orange1000, orange2000, orange3000, orange5000, red10000, red20000, red30000, red50000, purple100000, purple200000, purple300000;
     private TextView blue500, blue580, blue1000;
@@ -192,6 +198,11 @@ public class Game extends ActionBarActivity {
         sleepflag = 0;
         bflag = 1;
         pauseflag = 0;
+
+
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
 
         a1 = (Button) findViewById(R.id.ans1);
@@ -415,8 +426,27 @@ public class Game extends ActionBarActivity {
                 String score = sharedPreference.getValue(context, "OP_PREFS", "score");
                 String scoresofar = sharedPreference.getValue(context, "OP_PREFS", "scoresofar");
                 int newscore = Integer.parseInt(score) + game.getScore();
-                String newscoresofar = scoresofar + "0;0;20121212;####0;1;20121212;####" + game.getScore() + ";" + game.getCurrquest() + ";20121212;####";
+                System.out.println("Scoresofar:"+scoresofar);
+                String newscoresofar;
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month1 = cal.get(Calendar.MONTH)+1;
+                String month;
+                if (month1<10) {
+                    month = "0" + String.valueOf(month1);
+                }
+                else{
+                    month=String.valueOf(month1);
+                }
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                if ((scoresofar!=null)&&(scoresofar!="")) {
+                    newscoresofar = scoresofar + "0;0;"+year+month+day+";####0;1;"+year+month+day+";####" + game.getScore() + ";" + game.getCurrquest() + ";"+year+month+day+";####";
+                }
+                else{
+                    newscoresofar = "0;0;"+year+month+day+";####0;1;"+year+month+day+";####" + game.getScore() + ";" + game.getCurrquest() + ";"+year+month+day+";####";
+                }
                 sharedPreference.save(context, Integer.toString(newscore), "OP_PREFS", "score");
+                System.out.println("New Scoresofar="+newscoresofar);
                 sharedPreference.save(context, newscoresofar, "OP_PREFS", "scoresofar");
                 System.out.println("Saving Score as:" + newscore);
                 System.out.println("Saved:" + sharedPreference.getValue(context, "OP_PREFS", "score"));
@@ -454,6 +484,7 @@ public class Game extends ActionBarActivity {
                 });
                 pisw.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
+                        dialog.dismiss();
                         Intent intent = new Intent(Game.this, MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -740,11 +771,15 @@ public class Game extends ActionBarActivity {
             temp = game.getPercentages();
             firstbar = (TextView) pub.findViewById(R.id.firstbar);
             firstwords = (TextView) pub.findViewById(R.id.firstwords);
+            firstscore=(TextView)pub.findViewById(R.id.firstscore);
             secondbar = (TextView) pub.findViewById(R.id.secondbar);
             secondwords = (TextView) pub.findViewById(R.id.secondwords);
+            secondscore = (TextView) pub.findViewById(R.id.secondscore);
             thirdbar = (TextView) pub.findViewById(R.id.thirdbar);
+            thirdscore = (TextView) pub.findViewById(R.id.thirdscore);
             fourthwords = (TextView) pub.findViewById(R.id.fourthwords);
             fourthbar = (TextView) pub.findViewById(R.id.fourthbar);
+            fourthscore = (TextView) pub.findViewById(R.id.fourthscore);
             final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
             ArrayList<Integer> finaltemp = new ArrayList<Integer>();
             System.out.println("Findpub: " + findpub(game, answers).toString());
@@ -754,8 +789,10 @@ public class Game extends ActionBarActivity {
                 finaltemp.add(temp.get(findpub(game, answers).indexOf(q)));
                 System.out.println("Done for q=" + q);
             }
+            System.out.println("Temp="+temp.toString());
             float[] goal = new float[]{(finaltemp.get(0) * scale + 0.5f), (finaltemp.get(1) * scale + 0.5f), (finaltemp.get(2) * scale + 0.5f), (finaltemp.get(3) * scale + 0.5f)};
             System.out.println("Goal1= " + temp.get(0) + " , Goal2= " + temp.get(1) + " , Goal3= " + temp.get(2) + " , Goal4= " + temp.get(3));
+            System.out.println("Finaltemp1="+finaltemp.get(0)+"  Finaltemp2="+finaltemp.get(1)+"  Finaltemp3="+finaltemp.get(2)+"  Finaltemp4="+finaltemp.get(3));
             System.out.println("Goal1= " + goal[0] + " , Goal2= " + goal[1] + " , Goal3= " + goal[2] + " , Goal4= " + goal[3]);
             System.out.println("100dp= " + 100 * scale + 0.5f);
             ViewGroup.LayoutParams params = firstbar.getLayoutParams();
@@ -770,12 +807,16 @@ public class Game extends ActionBarActivity {
             params = fourthbar.getLayoutParams();
             params.height = 0;
             fourthbar.setLayoutParams(params);
-            startTimer2(3000, 50, goal);
+            startTimer2(3000, 50, goal,finaltemp);
             //<TextView android:text="First line\r\nNext line"
             pub.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(final DialogInterface arg0) {
                     timer2.cancel();
+                    y1=0;
+                    y2=0;
+                    y3=0;
+                    y4=0;
                     x1 = 0;
                     x2 = 0;
                     x3 = 0;
@@ -831,7 +872,7 @@ public class Game extends ActionBarActivity {
     }
 
 
-    private void startTimer2(int duration, int interval, final float[] goal) {
+    private void startTimer2(int duration, int interval, final float[] goal,final ArrayList<Integer> finaltemp) {
         timer2 = new CountDownTimer(duration + 1000, interval)
 
         {
@@ -842,27 +883,43 @@ public class Game extends ActionBarActivity {
             public void onTick(long leftTimeInMilliseconds) {
 
                 //System.out.println("Timer left in milliseconds= " + leftTimeInMilliseconds);
-
                 ViewGroup.LayoutParams params1 = firstbar.getLayoutParams();
                 params1.height = Math.round((x1 + (goal[0] / 60)));
                 x1 = x1 + (goal[0] / 60);
                 firstbar.setLayoutParams(params1);
+                if (y1<=finaltemp.get(0)) {
+                    y1++;
+                    firstscore.setText(Integer.toString(y1)+"%");
+                }
+
                 //System.out.println("Height for first bar: "+ params.height);
 
                 ViewGroup.LayoutParams params2 = secondbar.getLayoutParams();
                 params2.height = Math.round(x2 + (goal[1] / 60));
                 x2 = x2 + (goal[1] / 60);
                 secondbar.setLayoutParams(params2);
+                if (y2<=finaltemp.get(1)) {
+                    y2++;
+                    secondscore.setText(Integer.toString(y2)+"%");
+                }
 
                 ViewGroup.LayoutParams params3 = thirdbar.getLayoutParams();
                 params3.height = Math.round(x3 + (goal[2] / 60));
                 x3 = x3 + (goal[2] / 60);
                 thirdbar.setLayoutParams(params3);
+                if (y3<=finaltemp.get(2)) {
+                    y3++;
+                    thirdscore.setText(Integer.toString(y3)+"%");
+                }
 
                 ViewGroup.LayoutParams params4 = fourthbar.getLayoutParams();
                 params4.height = Math.round(x4 + (goal[3] / 60));
                 x4 = x4 + (goal[3] / 60);
                 fourthbar.setLayoutParams(params4);
+                if (y4<=finaltemp.get(3)) {
+                    y4++;
+                    fourthscore.setText(Integer.toString(y4)+"%");
+                }
             }
 
             @Override

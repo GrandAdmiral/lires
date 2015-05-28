@@ -12,13 +12,15 @@ public class Player implements Serializable {
     public int timesplayed;
     public Date updateddate;
     public int ScoreAmount;
+    public int position;
 
-    public Player(String name, int scoreAmount) {
+    public Player(String name, int scoreAmount, int position) {
         this.name = name;
         //this.deviceid = deviceid;
         //this.timesplayed = timesplayed;
         this.updateddate = updateddate;
         ScoreAmount = scoreAmount;
+        this.position=position;
     }
 
     public Player(String name, String deviceid, int timesplayed, int scoreAmount) {
@@ -68,5 +70,13 @@ public class Player implements Serializable {
 
     public void setScoreAmount(int scoreAmount) {
         ScoreAmount = scoreAmount;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        position = position;
     }
 }
