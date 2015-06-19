@@ -30,6 +30,8 @@ public class SoapProcedure {
 
     private static String SOAP_ACTION5 = "http://tempuri.org/GetTop100";
 
+    private static String SOAP_ACTION6 = "http://tempuri.org/SendFeedback";
+
     private static String NAMESPACE = "http://tempuri.org/";
 
     private static String METHOD_NAME1 = "GetAllQuestions";
@@ -41,6 +43,8 @@ public class SoapProcedure {
     private static String METHOD_NAME4 = "CreatePlayer";
 
     private static String METHOD_NAME5 = "GetTop100";
+
+    private static String METHOD_NAME6 = "SendFeedback";
 
     private static String URL = "http://test.kypriakeslires.com/WS.asmx?";
 
@@ -261,6 +265,36 @@ public class SoapProcedure {
         return scores;
 
     }
+
+
+
+
+    public SoapObject submitSuggestion(String question, String uuid) {
+        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME6);
+        SoapObject result = null;
+        request.addProperty("username", "jimmys");
+        request.addProperty("password", "aek");
+        request.addProperty("deviceId", uuid);
+        request.addProperty("question", question);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        System.out.println(request.toString());
+        envelope.setOutputSoapObject(request);
+        envelope.dotNet = true;
+        HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+        try {
+            androidHttpTransport.call(SOAP_ACTION6, envelope);
+            result = (SoapObject) envelope.getResponse();
+            System.out.println("Result:"+result.toString());
+        } catch (Exception e) {
+            System.out.println("Exception:"+e);
+
+        }
+
+        System.out.println("Submission successful??");
+        return result;
+    }
+
 
 
 }

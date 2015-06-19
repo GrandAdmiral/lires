@@ -62,6 +62,12 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="banner_ad_unit_id">ca-app-pub-3566115854753085/4796714850</string>
+    <string name="suggestions_html">
+        <![CDATA[
+<FONT COLOR="#515045">ΟΙ ΠΡ</FONT><FONT COLOR="#d8361c">ΟΤ</FONT><FONT COLOR="#62b41b">ΑΣ</FONT><FONT COLOR="#1a86d9">ΕΙ</FONT><FONT COLOR="#515045">Σ ΣΑΣ</FONT>
+        ]]>
+    </string>
 
+    <string name="banner_ad_unit_id">ca-app-pub-3566115854753085/4796714850</string>
+    <string name="interstellar_ad_unit_id">ca-app-pub-3566115854753085/5963893652</string>
 </resources>

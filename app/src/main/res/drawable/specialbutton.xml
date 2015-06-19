@@ -4,5 +4,8 @@
         android:drawable="@drawable/buttonblue" />
     <item android:state_focused="false" android:state_pressed="true"
         android:drawable="@drawable/buttonblue" />
-    <item android:drawable="@drawable/mybuttonblue" />
+    <item android:state_focused="false" android:state_pressed="false"
+        android:drawable="@drawable/mybuttonblue" />
+    <item android:state_focused="false" android:state_pressed="false"
+        android:drawable="@drawable/mybuttonblue" />
 </selector>

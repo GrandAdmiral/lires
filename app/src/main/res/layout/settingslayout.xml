@@ -12,6 +12,7 @@
         <ImageButton
             android:id="@+id/backbutton1"
             android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             android:src="@drawable/back"
             android:layout_weight="1"
             android:layout_width="0dp"
@@ -70,6 +71,7 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             android:text="Μουσική:"
             android:textSize="13dp"/>
         <Switch
@@ -94,6 +96,7 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             android:text="Αυτόματη Ενημέρωση:"
             android:textSize="13dp"/>
         <Switch
@@ -130,7 +133,8 @@
         android:layout_weight="1"
         android:background="@drawable/mybuttongreen"
         android:textColor="#ffffff"
-        android:text="ΚΑΤΑΧΩΡΗΣΗ"/>
+        android:text="ΚΑΤΑΧΩΡΗΣΗ"
+        android:textSize="22dp"/>
 <LinearLayout
     android:layout_width="0dp"
     android:layout_height="fill_parent"

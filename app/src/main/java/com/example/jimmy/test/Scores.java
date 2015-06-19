@@ -22,8 +22,12 @@ import android.widget.Toast;
 
 import org.ksoap2.serialization.SoapObject;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by jimmy on 26/03/15.
@@ -54,9 +58,15 @@ public class Scores extends Activity {
         listv=(ListView)findViewById(R.id.listView);
 
 
+
         SharedPreference sharedPreference=new SharedPreference();
-        String score = sharedPreference.getValue(getApplicationContext(),"OP_PREFS","score");
-        String s2="<![<FONT COLOR=\"#515045\">"+score+"  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
+        DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+
+        symbols.setGroupingSeparator(',');
+        int score = Integer.parseInt(sharedPreference.getValue(getApplicationContext(), "OP_PREFS", "score"));
+        String s2="<![<FONT COLOR=\"#515045\">"+  String.valueOf(formatter.format(score))+"  Λ</FONT><FONT COLOR=\"#d8361c\">Ι</FONT><FONT COLOR=\"#62b41b\">Ρ</FONT><FONT COLOR=\"#1a86d9\">Ε</FONT><FONT COLOR=\"#515045\">Σ</FONT>";
+
         scoregmt.setText(Html.fromHtml(s2));
 
         backbutton.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +81,9 @@ public class Scores extends Activity {
 
         weekly.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                weekly.setTextColor(Color.parseColor("#1a86d9"));
+                weekly.setPressed(true);
+                weekly.setSelected(true);
                 final MobileArrayAdapter adapter = new MobileArrayAdapter(getApplicationContext(), weeklist);
                 listv.setAdapter(adapter);
 
@@ -79,19 +91,59 @@ public class Scores extends Activity {
         });
 
 
-        /*today.setOnTouchListener(new View.OnTouchListener() {
+        today.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 today.setPressed(true);
+                weekly.setPressed(false);
+                weekly.setSelected(false);
+                weekly.setTextColor(Color.parseColor("#ffffff"));
+                alltime.setPressed(false);
+                alltime.setSelected(false);
+                alltime.setTextColor(Color.parseColor("#ffffff"));
+                today.performClick();
                 return true;
             }
         });
-*/
+
+        weekly.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                weekly.setPressed(true);
+                today.setPressed(false);
+                today.setSelected(false);
+                today.setTextColor(Color.parseColor("#ffffff"));
+                alltime.setPressed(false);
+                alltime.setSelected(false);
+                alltime.setTextColor(Color.parseColor("#ffffff"));
+                weekly.performClick();
+                return true;
+            }
+        });
+
+        alltime.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                alltime.setPressed(true);
+                today.setPressed(false);
+                today.setSelected(false);
+                today.setTextColor(Color.parseColor("#ffffff"));
+                weekly.setPressed(false);
+                weekly.setSelected(false);
+                weekly.setTextColor(Color.parseColor("#ffffff"));
+                alltime.performClick();
+                return true;
+            }
+        });
+
         today.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //today.setTextColor(Color.parseColor("#1a86d9"));
-                //today.setPressed(true);
+                today.setTextColor(Color.parseColor("#1a86d9"));
+                today.setPressed(true);
+                today.setSelected(true);
                 //System.out.println("Today:"+todaylist[0].getName().toString());
                 final MobileArrayAdapter adapter = new MobileArrayAdapter(getApplicationContext(), todaylist);
                 listv.setAdapter(adapter);
@@ -103,7 +155,9 @@ public class Scores extends Activity {
 
         alltime.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                alltime.setTextColor(Color.parseColor("#1a86d9"));
+                alltime.setPressed(true);
+                alltime.setSelected(true);
                 final MobileArrayAdapter adapter = new MobileArrayAdapter(getApplicationContext(), list3);
                 listv.setAdapter(adapter);
 
@@ -188,6 +242,18 @@ public class Scores extends Activity {
                             System.out.println(e.getMessage());
 
                         }
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                alltime.setPressed(true);
+                                alltime.setSelected(true);
+                                alltime.setTextColor(Color.parseColor("#1a86d9"));
+                                alltime.performClick();
+                                alltime.callOnClick();
+                                alltime.setFocusable(true);
+                                alltime.requestFocus();
+                            }
+                        });
+
                         ringProgressDialog1.dismiss();
                     }
                 }).start();

@@ -95,6 +95,7 @@ public class SettingsLires extends Activity {
                         } catch (Exception e) {
 
                         }
+                        Toast.makeText(getApplicationContext(), "Η καταχώρηση ολοκληρώθηκε επιτυχώς.", Toast.LENGTH_LONG).show();
                     }
                 }
 

@@ -1,7 +1,9 @@
 package com.example.jimmy.test;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -60,11 +62,15 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.sql.Date;
+import java.util.Locale;
 import java.util.Random;
 import android.provider.Settings.Secure;
 import android.widget.Toast;
@@ -104,24 +110,40 @@ public class Game extends ActionBarActivity {
     private LinearLayout scores_sofar, layoutcontainer;
     private boolean isPanelShown,musicon;
     private int flabutton1, flagbutton2, flagbutton3, flagbutton4;
+    private boolean answersready,boardsetting;
     private int flaghelp1, flaghelp2, flaghelp3, stopflag, restartflag, flag501, flag502, flag503, flag504;
     public String[] answers = {"1", "2", "3", "4"};
     public MediaPlayer answertapped, correct, gamemusic, startmusic, wrongmusic;
     private int timer1flag, timer2flag, timer3flag;
     private View v1;
     private String answ234;
-
+    InterstitialAd mInterstitialAd;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
         Typeface font = Typeface.createFromAsset(getAssets(), "Roboto-Light.ttf");
         SharedPreference sharedP = new SharedPreference();
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3566115854753085/5963893652");
+        requestNewInterstitial();
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                Intent intent = new Intent(Game.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         if (sharedP.getValue(getApplicationContext(),"OP_PREFS","musicon").equals("1")) {musicon=true;} else {musicon=false;}
         musicflag = 0;
         timer1flag = 0;
         timer2flag = 0;
         timer3flag = 0;
+        boardsetting=false;
+        answersready=false;
         framework = (FrameLayout) findViewById(R.id.framework);
         layoutcontainer = (LinearLayout) findViewById(R.id.layoutContainer);
         rel1 = (RelativeLayout) findViewById(R.id.rel1);
@@ -214,7 +236,7 @@ public class Game extends ActionBarActivity {
                     if (musicon) gamemusic.pause();
                     if (musicon) answertapped.start();
                     pauseflag = 1;
-                    a1.setBackgroundResource(R.drawable.mybuttonblue);
+                    a1.setBackgroundResource(R.drawable.mybuttonanswerblue);
                     right = (game.ca.equals(answers[0]));
                     final Button wrong;
                     if (!right) {
@@ -241,7 +263,7 @@ public class Game extends ActionBarActivity {
                     if (musicon) gamemusic.pause();
                     if (musicon) answertapped.start();
                     pauseflag = 1;
-                    a2.setBackgroundResource(R.drawable.mybuttonblue);
+                    a2.setBackgroundResource(R.drawable.mybuttonanswerblue);
                     right = (game.ca.equals(answers[1]));
                     final Button wrong;
                     if (!right) {
@@ -268,7 +290,7 @@ public class Game extends ActionBarActivity {
                     if (musicon) gamemusic.pause();
                     if (musicon) answertapped.start();
                     pauseflag = 1;
-                    a3.setBackgroundResource(R.drawable.mybuttonblue);
+                    a3.setBackgroundResource(R.drawable.mybuttonanswerblue);
                     right = (game.ca.equals(answers[2]));
                     final Button wrong;
                     if (!right) {
@@ -296,7 +318,7 @@ public class Game extends ActionBarActivity {
                     if (musicon) gamemusic.pause();
                     if (musicon) answertapped.start();
                     pauseflag = 1;
-                    a4.setBackgroundResource(R.drawable.mybuttonblue);
+                    a4.setBackgroundResource(R.drawable.mybuttonanswerblue);
                     right = (game.ca.equals(answers[3]));
                     final Button wrong;
                     if (!right) {
@@ -319,14 +341,14 @@ public class Game extends ActionBarActivity {
         gh = (ImageButton) findViewById(R.id.greenhelp);
         gh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (bflag == 0)
+                if ((bflag == 0)&&(answersready))
                     boitheia("green", "tel");
             }
         });
         rh = (ImageButton) findViewById(R.id.redhelp);
         rh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (bflag == 0)
+                if ((bflag == 0)&&(answersready))
                     boitheia("red", "50");
             }
         });
@@ -334,7 +356,7 @@ public class Game extends ActionBarActivity {
         bh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //System.out.println("Button setting pauseflag 1");
-                if (bflag == 0)
+                if ((bflag == 0)&&(answersready))
                     boitheia("blue", "pub");
             }
         });
@@ -361,7 +383,7 @@ public class Game extends ActionBarActivity {
         Questions = gson.fromJson(user_json, new TypeToken<ArrayList<Question>>() {
         }.getType());
         questtext = (TextView) findViewById(R.id.questtext);
-        questtext2 = (TextSwitcher) findViewById(R.id.quest2);
+        /*questtext2 = (TextSwitcher) findViewById(R.id.quest2);
         final Animation out = new AlphaAnimation(0.0f, 1.0f);
         out.setDuration(3000);
         AnimationSet as = new AnimationSet(true);
@@ -379,7 +401,7 @@ public class Game extends ActionBarActivity {
                 myText.setTextColor(Color.WHITE);
                 return myText;
             }
-        });
+        });*/
 
         String android_id = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
         game.setPlayerid(android_id);
@@ -410,6 +432,7 @@ public class Game extends ActionBarActivity {
                 flag502 = 0;
                 flag503 = 0;
                 flag504 = 0;
+                answersready=false;
                 randomizeAnswers(answers);
                 setBoard(game);
                 bflag = 0;
@@ -438,12 +461,22 @@ public class Game extends ActionBarActivity {
                 else{
                     month=String.valueOf(month1);
                 }
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-                if ((scoresofar!=null)&&(scoresofar!="")) {
-                    newscoresofar = scoresofar + "0;0;"+year+month+day+";####0;1;"+year+month+day+";####" + game.getScore() + ";" + game.getCurrquest() + ";"+year+month+day+";####";
+                int day1 = cal.get(Calendar.DAY_OF_MONTH);
+                String day;
+                if (day1<10) {
+                    day = "0" + String.valueOf(day1);
                 }
                 else{
-                    newscoresofar = "0;0;"+year+month+day+";####0;1;"+year+month+day+";####" + game.getScore() + ";" + game.getCurrquest() + ";"+year+month+day+";####";
+                    day=String.valueOf(day1);
+                }
+                int gamequest=game.getCurrquest()-1;
+                if (gamequest==-1) gamequest=0;
+                if (game.getFlag()==2) { gamequest=18;}
+                if ((scoresofar!=null)&&(scoresofar!="")) {
+                    newscoresofar = scoresofar + "0;0;"+year+month+day+";####0;1;"+year+month+day+";####" + game.getScore() + ";" + gamequest + ";"+year+month+day+";####";
+                }
+                else{
+                    newscoresofar = "0;0;"+year+month+day+";####0;1;"+year+month+day+";####" + game.getScore() + ";" + gamequest + ";"+year+month+day+";####";
                 }
                 sharedPreference.save(context, Integer.toString(newscore), "OP_PREFS", "score");
                 System.out.println("New Scoresofar="+newscoresofar);
@@ -453,9 +486,11 @@ public class Game extends ActionBarActivity {
                 dialog = new Dialog(Game.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 // Include dialog.xml file
-                dialog.setContentView(R.layout.finishscore);
 
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                    dialog.setContentView(R.layout.finishscore);
+
+
+                /*WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 lp.copyFrom(dialog.getWindow().getAttributes());
                 Display display = getWindowManager().getDefaultDisplay();
                 Point size = new Point();
@@ -464,15 +499,17 @@ public class Game extends ActionBarActivity {
                 int height = size.y;
                 lp.width = (int) (width * 0.6);
                 lp.height = (int) (height * 0.6);
-                dialog.getWindow().setAttributes(lp);
+                dialog.getWindow().setAttributes(lp);*/
 
                 TextView kerdisate = (TextView) dialog.findViewById(R.id.kerdisate);
                 kerdisate.setText(Html.fromHtml(getString(R.string.kerdisate_html)));
                 TextView lires12 = (TextView) dialog.findViewById(R.id.lires12);
                 lires12.setText(Html.fromHtml(getString(R.string.lires_html)));
                 TextView finalscore = (TextView) dialog.findViewById(R.id.finalscore);
-
-                finalscore.setText(Integer.toString(game.getScore()));
+                DecimalFormat formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+                DecimalFormatSymbols symbols = formatter.getDecimalFormatSymbols();
+                symbols.setGroupingSeparator(',');
+                finalscore.setText(String.valueOf(formatter.format(game.getScore())));
                 Button pameksana = (Button) dialog.findViewById(R.id.goagain);
                 Button pisw = (Button) dialog.findViewById(R.id.goback);
                 pameksana.setOnClickListener(new View.OnClickListener() {
@@ -485,9 +522,13 @@ public class Game extends ActionBarActivity {
                 pisw.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         dialog.dismiss();
-                        Intent intent = new Intent(Game.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        if (mInterstitialAd.isLoaded()) {
+                            mInterstitialAd.show();
+                        } else {
+                            Intent intent = new Intent(Game.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
                     }
                 });
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -499,8 +540,10 @@ public class Game extends ActionBarActivity {
 
                     }
                 });
-                dialog.show();
-
+                try {
+                    dialog.show();
+                }
+                catch(Exception e){}
 
             }
         } else {
@@ -525,7 +568,8 @@ public class Game extends ActionBarActivity {
 
 
     public void setBoard(final Session game1) {
-        questtext2.setText(game1.questt);
+        boardsetting=true;
+        questtext.setText(game1.questt);
         a11.setText("");
         a1.setText("");
         a2.setText("");
@@ -544,7 +588,7 @@ public class Game extends ActionBarActivity {
                     flabutton1 = 0;
                 }
             }
-        }, 3000);
+        }, 1200);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -555,7 +599,7 @@ public class Game extends ActionBarActivity {
                     flagbutton2 = 0;
                 }
             }
-        }, 4500);
+        }, 2700);
         Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {
             public void run() {
@@ -566,7 +610,7 @@ public class Game extends ActionBarActivity {
                     flagbutton3 = 0;
                 }
             }
-        }, 6000);
+        }, 4200);
         Handler handler3 = new Handler();
         handler3.postDelayed(new Runnable() {
             public void run() {
@@ -575,9 +619,10 @@ public class Game extends ActionBarActivity {
                 if (flag504 == 0) {
                     a4.setText(Html.fromHtml(first + next));
                     flagbutton4 = 0;
+                    answersready=true;
                 }
             }
-        }, 7500);
+        },5700);
         a1.setBackgroundResource(R.drawable.mybuttonanswer);
         a11.setBackgroundResource(R.drawable.mybuttonanswer);
         a2.setBackgroundResource(R.drawable.mybuttonanswer);
@@ -761,10 +806,12 @@ public class Game extends ActionBarActivity {
 
             pauseflag = 1;
             pub = new Dialog(Game.this);
+            pub.getWindow();
             pub.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
             // Include dialog.xml file
             pub.setContentView(R.layout.pub);
+
             publ = (TextView) pub.findViewById(R.id.pub);
             publ.setText(Html.fromHtml(getString(R.string.pub_html)));
             ArrayList<Integer> temp = new ArrayList<Integer>();
@@ -976,7 +1023,7 @@ public class Game extends ActionBarActivity {
     public void changeColor(final Button but, final String answ23, final Boolean right, final Button wrong, final View v) {
 
         if (right) {
-            counter(but).setBackgroundResource(R.drawable.mybuttongreen);
+            counter(but).setBackgroundResource(R.drawable.mybuttonanswergreen);
             counter(but).setText(but.getText());
             AlphaAnimation transparency = new AlphaAnimation(1, 0);
             transparency.setDuration(800);
@@ -991,10 +1038,10 @@ public class Game extends ActionBarActivity {
             }
             if (musicon) correct.start();
         } else {
-            counter(but).setBackgroundResource(R.drawable.mybuttonred);
-            counter(wrong).setBackgroundResource(R.drawable.mybuttongreen);
-            counter(but).setText(but.getText());
-            counter(wrong).setText(wrong.getText());
+            counter(but).setBackgroundResource(R.drawable.mybuttonanswerred);
+            counter(wrong).setBackgroundResource(R.drawable.mybuttonanswergreen);
+            counter(but).setText(Html.fromHtml(counterstring(but, game)));
+            counter(wrong).setText(Html.fromHtml(counterstring(wrong, game)));
             AlphaAnimation transparency = new AlphaAnimation(1, 0);
             transparency.setDuration(800);
             transparency.setFillAfter(true);
@@ -1166,64 +1213,64 @@ public class Game extends ActionBarActivity {
         System.out.println("Current Question is: " + game.currquest);
         switch (game.currquest) {
             case 1:
-                executeAnimation(green100, green_sofar, "#62b41b", "100 λίρες", 1000);
+                executeAnimation(green100, green_sofar, "#62b41b", "£100", 1000,false);
                 break;
             case 2:
-                executeAnimation(green200, green_sofar, "#62b41b", "200 λίρες", 1000);
+                executeAnimation(green200, green_sofar, "#62b41b", "£200", 1000,false);
                 break;
             case 3:
-                executeAnimation(green300, green_sofar, "#62b41b", "300 λίρες", 1000);
+                executeAnimation(green300, green_sofar, "#62b41b", "£300", 1000,false);
                 break;
             case 4:
-                executeAnimation(green500, green_sofar, "#62b41b", "500 λίρες", 1000);
+                executeAnimation(green500, green_sofar, "#62b41b", "£500", 1000,false);
                 break;
             case 5:
-                executeAnimation(orange1000, orange_sofar, "#f8870c", "1000 λίρες", 1000);
+                executeAnimation(orange1000, orange_sofar, "#f8870c", "£1000", 1000,false);
                 break;
             case 6:
-                executeAnimation(orange2000, orange_sofar, "#f8870c", "2000 λίρες", 1000);
+                executeAnimation(orange2000, orange_sofar, "#f8870c", "£2000", 1000,false);
                 break;
             case 7:
-                executeAnimation(orange3000, orange_sofar, "#f8870c", "3000 λίρες", 1000);
+                executeAnimation(orange3000, orange_sofar, "#f8870c", "£3000", 1000,false);
                 break;
             case 8:
-                executeAnimation(orange5000, orange_sofar, "#f8870c", "5000 λίρες", 1000);
+                executeAnimation(orange5000, orange_sofar, "#f8870c", "£5000", 1000,false);
                 break;
             case 9:
-                executeAnimation(red10000, red_sofar, "#d8361c", "10000 λίρες", 1000);
+                executeAnimation(red10000, red_sofar, "#d8361c", "£10000", 1000,false);
                 break;
             case 10:
-                executeAnimation(red20000, red_sofar, "#d8361c", "20000 λίρες", 1000);
+                executeAnimation(red20000, red_sofar, "#d8361c", "£20000", 1000,false);
                 break;
             case 11:
-                executeAnimation(red30000, red_sofar, "#d8361c", "30000 λίρες", 1000);
+                executeAnimation(red30000, red_sofar, "#d8361c", "£30000", 1000,false);
                 break;
             case 12:
-                executeAnimation(red50000, red_sofar, "#d8361c", "50000 λίρες", 1000);
+                executeAnimation(red50000, red_sofar, "#d8361c", "£50000", 1000,false);
                 break;
             case 13:
-                executeAnimation(purple100000, purple_sofar, "#7e4881", "100000 λίρες", 1000);
+                executeAnimation(purple100000, purple_sofar, "#7e4881", "£100000", 1000,false);
                 break;
             case 14:
-                executeAnimation(purple200000, purple_sofar, "#7e4881", "200000 λίρες", 1000);
+                executeAnimation(purple200000, purple_sofar, "#7e4881", "£200000", 1000,false);
                 break;
             case 15:
-                executeAnimation(purple300000, purple_sofar, "#7e4881", "300000 λίρες", 1000);
+                executeAnimation(purple300000, purple_sofar, "#7e4881", "£300000", 1000,false);
                 break;
             case 16:
-                executeAnimation(blue500, purple_sofar, "#7e4881", "500000 λίρες", 1000);
+                executeAnimation(blue500, purple_sofar, "#7e4881", "£500000", 1000,false);
                 break;
             case 17:
-                executeAnimation(blue580, blue_sofar, "#1a86d9", "586509 λίρες", 1000);
+                executeAnimation(blue580, blue_sofar, "#1a86d9", "£586509", 1000,false);
                 break;
             case 18:
-                executeAnimation(blue1000, blue_sofar, "#1a86d9", "1000000 λίρες", 1000);
+                executeAnimation(blue1000, blue_sofar, "#1a86d9", "£1000000", 1000,false);
                 break;
         }
 
     }
 
-    public void executeAnimation(TextView tv, TextView tv_sofar, String color, String text, int duration) {
+    public void executeAnimation(TextView tv, TextView tv_sofar, String color, String text, int duration,boolean reset) {
         float top = tv.getTop();
         float left = hiddenPanel.getLeft();
         final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
@@ -1235,22 +1282,27 @@ public class Game extends ActionBarActivity {
         FrameLayout.LayoutParams params25 = new FrameLayout.LayoutParams((int) FrameLayout.LayoutParams.WRAP_CONTENT, (int) FrameLayout.LayoutParams.WRAP_CONTENT);
         params25.leftMargin = (int) left;
         params25.topMargin = (int) top;
+        if (!reset) {
         params25.width = red_sofar.getWidth();
-        params25.height = red_sofar.getHeight();
+        params25.height = red_sofar.getHeight();}
+        else{
+            params25.width = red_sofar.getWidth()+10;
+            params25.height = red_sofar.getHeight()+10;
+        }
         if (color.equals("#62b41b")) {
-            trial.setBackground(getResources().getDrawable(R.drawable.mybuttongreen));
+            trial.setBackground(getResources().getDrawable(R.drawable.mybuttonanswergreen));
         }
         if (color.equals("#f8870c")) {
-            trial.setBackground(getResources().getDrawable(R.drawable.mybuttonorange));
+            trial.setBackground(getResources().getDrawable(R.drawable.mybuttonanswerorange));
         }
         if (color.equals("#d8361c")) {
-            trial.setBackground(getResources().getDrawable(R.drawable.mybuttonred));
+            trial.setBackground(getResources().getDrawable(R.drawable.mybuttonanswerred));
         }
         if (color.equals("#7e4881")) {
-            trial.setBackground(getResources().getDrawable(R.drawable.mybuttonpurple));
+            trial.setBackground(getResources().getDrawable(R.drawable.mybuttonanswerpurple));
         }
         if (color.equals("#1a86d9")) {
-            trial.setBackground(getResources().getDrawable(R.drawable.mybuttonblue));
+            trial.setBackground(getResources().getDrawable(R.drawable.mybuttonanswerblue));
         }
         if (color.equals("#e1e0d7")) {
             trial.setBackgroundColor(Color.parseColor("#e1e0d7"));
@@ -1405,11 +1457,11 @@ public class Game extends ActionBarActivity {
         sleepflag = 0;
         bflag = 1;
         pauseflag = 0;
-        executeAnimation(green100, green_sofar, "#e1e0d7", "", 10);
-        executeAnimation(orange1000, orange_sofar, "#e1e0d7", "", 10);
-        executeAnimation(red10000, red_sofar, "#e1e0d7", "", 10);
-        executeAnimation(purple100000, purple_sofar, "#e1e0d7", "", 10);
-        executeAnimation(blue500, blue_sofar, "#e1e0d7", "", 10);
+        executeAnimation(green100, green_sofar, "#e1e0d7", "", 10,true);
+        executeAnimation(orange1000, orange_sofar, "#e1e0d7", "", 10,true);
+        executeAnimation(red10000, red_sofar, "#e1e0d7", "", 10,true);
+        executeAnimation(purple100000, purple_sofar, "#e1e0d7", "", 10,true);
+        executeAnimation(blue500, blue_sofar, "#e1e0d7", "", 10,true);
         game.help = new ArrayList<String>(Arrays.asList("pub", "tel", "50"));
         game.start();
         System.out.println("HELP=" + help);
@@ -1496,6 +1548,29 @@ public class Game extends ActionBarActivity {
         else return a44;
     }
 
+    String counterstring(Button a, Session game1) {
+        if (a.equals(a1)) {
+            String first = "<font color='#000000'>A. </font>";
+            String next = "<font color='#ffffff'>" + getAns(game1, answers[0]) + "</font>";
+            return first + next;
+        }
+        if (a.equals(a2)) {
+            String first = "<font color='#000000'>B. </font>";
+            String next = "<font color='#ffffff'>" + getAns(game1, answers[1]) + "</font>";
+            return first + next;
+        }
+
+        if (a.equals(a3)) {
+            String first = "<font color='#000000'>Γ. </font>";
+            String next = "<font color='#ffffff'>" + getAns(game1, answers[2]) + "</font>";
+            return first + next;
+        }
+        else {
+            String first = "<font color='#000000'>Δ. </font>";
+            String next = "<font color='#ffffff'>" + getAns(game1, answers[3]) + "</font>";
+            return first+next;
+        }
+    }
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -1506,5 +1581,13 @@ public class Game extends ActionBarActivity {
         flagbutton2 = 1;
         flagbutton3 = 1;
         flagbutton4 = 1;
+    }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("YOUR_DEVICE_HASH")
+                .build();
+
+        mInterstitialAd.loadAd(adRequest);
     }
 }

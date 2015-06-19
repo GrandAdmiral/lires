@@ -45,6 +45,8 @@ private EditText editname;
         String username = sharedPreference.getValue(context,"OP_PREFS","username");
         String android_id = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         if (username!=null){
+            SharedPreference sharedP = new SharedPreference();
+            sharedP.save(getApplicationContext(), "1", "OP_PREFS", "justrun");
             Intent intent = new Intent(landingscreen.this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -77,6 +79,7 @@ private EditText editname;
                                 sharedP.save(getApplicationContext(), "1", "OP_PREFS", "musicon");
                                 sharedP.save(getApplicationContext(), "1", "OP_PREFS", "syncon");
                                 sharedP.save(getApplicationContext(), "1", "OP_PREFS", "firsttime");
+                                sharedP.save(getApplicationContext(), "1", "OP_PREFS", "justrun");
                                 System.out.println("Value=" + sharedP.getValue(getApplicationContext(), "OP_PREFS", "musicon"));
                                 SoapProcedure soap = new SoapProcedure();
                                 String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
