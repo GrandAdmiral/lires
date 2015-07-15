@@ -731,7 +731,34 @@ public class Game extends ActionBarActivity {
             tel = (TextView) dialog.findViewById(R.id.tel);
             tel.setText(Html.fromHtml(getString(R.string.tel_html)));
             anstel = (TextView) dialog.findViewById(R.id.anstel);
-            anstel.setText("Σίγουρα η απάντηση είναι " + game.getAnswer(Integer.parseInt(game.getCa())));
+            ArrayList<Integer> temp = new ArrayList<Integer>();
+            temp = game.getPercentages();
+            System.out.println("Temp Percentages=" + temp.toString());
+            if (temp.get(0)>50) {
+                anstel.setText("Σίγουρα η απάντηση είναι " + game.getAnswer(Integer.parseInt(game.getCa())));
+            }
+            else if (temp.get(0)>35) {
+                anstel.setText("H απάντηση νομίζω είναι " + game.getAnswer(Integer.parseInt(game.getCa())));
+            }
+            else if (temp.get(0)>30) {
+                if (temp.get(0) > temp.get(1)) {
+                    anstel.setText("Είμαι μεταξύ των " + game.getAnswer(Integer.parseInt(game.getCa())) + " και " + game.getAnswer(Integer.parseInt(game.getSa())));
+                }
+                else
+                {
+                    anstel.setText("Είμαι μεταξύ των " + game.getAnswer(Integer.parseInt(game.getSa())) + " και " + game.getAnswer(Integer.parseInt(game.getCa())));
+                }
+            }
+            else{
+                if (temp.get(0) > temp.get(1)) {
+                    anstel.setText("Δύσκολο. Νομίζω πως είναι " + game.getAnswer(Integer.parseInt(game.getCa())));
+                }
+                else
+                {
+                    anstel.setText("Δύσκολο. Νομίζω πως είναι " + game.getAnswer(Integer.parseInt(game.getSa())));
+                }
+
+            }
             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(final DialogInterface arg0) {

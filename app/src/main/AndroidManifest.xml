@@ -7,6 +7,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:title="Lires"
         android:theme="@style/AppTheme">
         <meta-data android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -56,7 +57,7 @@
         </activity>
         <activity
             android:name=".SettingsLires"
-            android:label="Test"
+            android:label="Lires"
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize"
             >
